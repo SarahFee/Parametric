@@ -836,69 +836,68 @@ def display_key_insights(results):
         un_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "UN Agency"))
         hybrid_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "Hybrid"))
 
-        # Apply a white background panel with black text for better visibility
-        st.markdown("""
-        <style>
-        .insights-panel {
-            background-color: white;
-            color: black;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .insights-panel h3 {
-            color: #0066cc;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .insights-panel ul {
-            margin-left: 20px;
-            padding-left: 20px;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
-        # Create two columns for the insights
-        col1_md = []
-        col2_md = []
+        # Create a more direct white background panel using HTML
+        html_content = """
+        <div style="background-color: white; color: black; padding: 20px; border-radius: 5px; margin: 10px 0;">
+            <div style="display: flex; flex-wrap: wrap;">
+                <!-- Left Column -->
+                <div style="flex: 1; min-width: 300px; margin-right: 20px;">
+                    <h3 style="color: #0066cc; margin-top: 0;">Insurance Performance</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
+                        <li>Total Premiums Collected: ${:,.0f}</li>
+                        <li>Claims Processed (in log): {}</li>
+                        <li>Total Payouts Made: ${:,.0f}</li>
+                        <li>Insurer Final Profit: ${:,.0f}</li>
+                        <li>Net Profit Margin: {:.1f}%</li>
+                    </ul>
+                    
+                    <h3 style="color: #0066cc; margin-top: 20px;">Claims by Organization Type (logged)</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
+                        <li>NGO: {} claims</li>
+                        <li>UN Agency: {} claims</li>
+                        <li>Hybrid: {} claims</li>
+                    </ul>
+                </div>
+                
+                <!-- Right Column -->
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="color: #0066cc; margin-top: 0;">Risk Events Logged</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
+                        <li>Emergency events: {}</li>
+                        <li>Security evacuations: {}</li>
+                        <li>Total disruptions: {}</li>
+                        <li>Disruption rate: {:.1f} per month</li>
+                    </ul>
+                    
+                    <h3 style="color: #0066cc; margin-top: 20px;">Data Source Impact</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
+                        <li>HDX Data Source: {}</li>
+                        <li>Emergency Data: ACAPS INFORM Severity Index</li>
+                        <li>Security Data: ACLED conflict events</li>
+                        <li>IATI Data: {}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        """.format(
+            total_premiums,
+            claim_count,
+            final_insurer.get('payouts_made', 0),
+            insurer_profits,
+            (insurer_profits / total_premiums * 100) if total_premiums > 0 else 0,
+            ngo_claims,
+            un_claims,
+            hybrid_claims,
+            emergency_count,
+            security_count,
+            emergency_count + security_count,
+            (emergency_count + security_count) / sim_duration if sim_duration > 0 else 0,
+            hdx_data_source,
+            "Yes" if results.get('iati_params') else "No"
+        )
         
-        # Column 1 content
-        col1_md.append("### Insurance Performance")
-        profit_margin = (insurer_profits / total_premiums * 100) if total_premiums > 0 else 0
-        col1_md.append("- Total Premiums Collected: ${:,.0f}".format(total_premiums))
-        col1_md.append("- Claims Processed (in log): {}".format(claim_count))
-        col1_md.append("- Total Payouts Made: ${:,.0f}".format(final_insurer.get('payouts_made', 0)))
-        col1_md.append("- Insurer Final Profit: ${:,.0f}".format(insurer_profits))
-        col1_md.append("- Net Profit Margin: {:.1f}%".format(profit_margin))
-        
-        col1_md.append("\n### Claims by Organization Type (logged)")
-        col1_md.append("- NGO: {} claims".format(ngo_claims))
-        col1_md.append("- UN Agency: {} claims".format(un_claims))
-        col1_md.append("- Hybrid: {} claims".format(hybrid_claims))
-
-        # Column 2 content
-        col2_md.append("### Risk Events Logged")
-        disruption_rate = (emergency_count + security_count) / sim_duration if sim_duration > 0 else 0
-        col2_md.append("- Emergency events: {}".format(emergency_count))
-        col2_md.append("- Security evacuations: {}".format(security_count))
-        col2_md.append("- Total disruptions: {}".format(emergency_count + security_count))
-        col2_md.append("- Disruption rate: {:.1f} per month".format(disruption_rate))
-        
-        col2_md.append("\n### Data Source Impact")
-        col2_md.append("- HDX Data Source: {}".format(hdx_data_source))
-        col2_md.append("- Emergency Data: ACAPS INFORM Severity Index")
-        col2_md.append("- Security Data: ACLED conflict events")
-        col2_md.append("- IATI Data: {}".format("Yes" if results.get('iati_params') else "No"))
-
-        # Create the panel with two columns
-        st.markdown('<div class="insights-panel">', unsafe_allow_html=True)
-        cols = st.columns(2)
-        with cols[0]:
-            st.markdown("\n".join(col1_md), unsafe_allow_html=True)
-        with cols[1]:
-            st.markdown("\n".join(col2_md), unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Display the HTML content
+        st.markdown(html_content, unsafe_allow_html=True)
         
     except Exception as e:
         st.error(f"Error displaying key insights: {e}")
