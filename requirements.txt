@@ -2,8 +2,7 @@
 pandas
 numpy
 requests
-mesa
-mesa-time
+mesa>=3.0.0
 
 # Streamlit apps
 streamlit
@@ -19,3 +18,4 @@ langchain
 openai
 together
 faiss-cpu
+
