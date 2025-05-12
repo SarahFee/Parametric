@@ -1,0 +1,21 @@
+# Core library dependencies
+pandas
+numpy
+requests
+hdx-python
+iati-xml
+
+# Streamlit apps
+streamlit
+plotly
+altair
+matplotlib
+
+# MCP-based sensitivity analysis
+langchain
+openai
+togetherai
+faiss-cpu
+
+# Environment variable management
+python-dotenv
