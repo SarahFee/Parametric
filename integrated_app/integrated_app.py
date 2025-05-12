@@ -592,56 +592,198 @@ def plot_continuity_impact(results):
         logger.error(f"Error in plot_continuity_impact: {e}", exc_info=True)
 
 def plot_profit_and_impact(results):
-    """Plot the insurer profit and each organization's net impact over time from results."""
+    """Plot the insurer profit and each organization's balance over time from results."""
     try:
         profit_history = results.get('profit_history', [])
-        final_org_impact = results.get('final_org_impact', {}) # Final impact
-        final_org_states = results.get('final_org_states', []) # Need this for names/types
+        org_balance_history = results.get('org_balance_history', {})
+        
+        if not profit_history and not org_balance_history:
+            st.warning("No profit or organization balance history data available to plot.")
+            return
 
-        if not profit_history and not final_org_impact:
-             st.warning("No profit or impact data available to plot.")
-             return
-
-        # --- Plotting Insurer Profit (if available) ---
-        fig, ax = plt.subplots(figsize=(12, 6))
-        steps = list(range(len(profit_history)))
-
-        if profit_history:
-            ax.plot(steps, profit_history, label="Insurer Profit", linewidth=2, color='green')
-
-        # --- Plotting FINAL Org Impact (as horizontal lines for now) ---
-        colors = { "World-Vision": "#3498db", "UNHCR": "#2ecc71", "IOM": "#9b59b6" }
-        if final_org_impact and final_org_states:
-             st.markdown("###### Final Organization Net Impact (vs Initial Capital)")
-             impact_data = []
-             for org_state in final_org_states:
-                  name = org_state.get('name')
-                  impact = final_org_impact.get(name, 0)
-                  impact_data.append({
-                       "Organization": name,
-                       "Type": org_state.get('org_type'),
-                       "Final Net Impact ($)": impact
-                  })
-             impact_df = pd.DataFrame(impact_data)
-             st.dataframe(impact_df.style.format({"Final Net Impact ($)": "${:,.0f}"}))
-
-        # --- Configure and Show Plot (mainly for profit history) ---
-        if profit_history: # Only show plot if there's something to plot
-            ax.set_title("Insurer Profit Over Time", fontsize=14) # Adjusted title if only profit shown
-            ax.set_xlabel("Months (Steps)", fontsize=12)
-            ax.set_ylabel("Value ($)", fontsize=12)
-            ax.axhline(0, color='gray', linestyle=':', linewidth=1)
-            ax.grid(True, alpha=0.3)
-            ax.legend()
-            st.markdown('<div class="plot-container">', unsafe_allow_html=True)
-            st.pyplot(fig)
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        plt.close(fig) # Close figure
+        # Create tabs for different visualization views
+        tabs = st.tabs(["Insurer Profit", "Organizations Comparison", "Individual Organizations"])
+        
+        with tabs[0]:
+            # --- Plotting Insurer Profit (if available) ---
+            if profit_history:
+                fig, ax = plt.subplots(figsize=(12, 6))
+                steps = list(range(len(profit_history)))
+                ax.plot(steps, profit_history, label="Insurer Profit", linewidth=2, color='green')
+                ax.set_title("Insurer Profit Over Time", fontsize=14)
+                ax.set_xlabel("Months (Steps)", fontsize=12)
+                ax.set_ylabel("Value ($)", fontsize=12)
+                ax.axhline(0, color='gray', linestyle=':', linewidth=1)
+                ax.grid(True, alpha=0.3)
+                ax.legend()
+                st.pyplot(fig)
+                plt.close(fig)
+        
+        with tabs[1]:
+            # --- Plotting All Organizations Together for Comparison ---
+            if org_balance_history:
+                # Create a DataFrame for easier plotting with Plotly
+                balance_data = {org_name: balances for org_name, balances in org_balance_history.items()}
+                steps = list(range(len(next(iter(balance_data.values())))))
+                
+                # Use Plotly for interactive comparison
+                import plotly.graph_objects as go
+                fig = go.Figure()
+                
+                # Color mapping for org types
+                colors = {
+                    "World-Vision": "#3498db",  # NGO - Blue
+                    "UNHCR": "#2ecc71",         # UN Agency - Green
+                    "IOM": "#9b59b6"            # Hybrid - Purple
+                }
+                
+                # Add insurer profit line
+                if profit_history:
+                    fig.add_trace(
+                        go.Scatter(
+                            x=steps,
+                            y=profit_history,
+                            mode='lines+markers',
+                            name='Insurer (ParaInsure)',
+                            line=dict(color='#e74c3c', width=3, dash='solid')
+                        )
+                    )
+                
+                # Add each organization
+                for org_name, balances in balance_data.items():
+                    # Get org type for label and color
+                    org_type = next((org['org_type'] for org in results.get('final_org_states', []) 
+                                   if org['name'] == org_name), "")
+                    label = f"{org_name} ({org_type})"
+                    color = colors.get(org_name, "#7f8c8d")  # Default gray if not found
+                    
+                    fig.add_trace(
+                        go.Scatter(
+                            x=steps,
+                            y=balances,
+                            mode='lines+markers',
+                            name=label,
+                            line=dict(color=color, width=2)
+                        )
+                    )
+                
+                # Layout
+                fig.update_layout(
+                    title="Financial Performance Comparison",
+                    xaxis_title="Months (Steps)",
+                    yaxis_title="Balance ($)",
+                    legend=dict(
+                        yanchor="top",
+                        y=0.99,
+                        xanchor="left",
+                        x=0.01
+                    ),
+                    hovermode="x unified"
+                )
+                
+                st.plotly_chart(fig, use_container_width=True)
+                
+                # Add explanation
+                st.markdown("""
+                ### Financial Performance Comparison
+                
+                This chart shows how each organization's balance changes over time compared to the insurer's profit.
+                * **NGO (Blue)**: World-Vision
+                * **UN Agency (Green)**: UNHCR
+                * **Hybrid (Purple)**: IOM
+                * **Insurer (Red)**: ParaInsure
+                
+                You can hover over the lines to see exact values and click on the legend items to hide/show specific organizations.
+                """)
+        
+        with tabs[2]:
+            # --- Individual Organization Performance ---
+            if org_balance_history:
+                # Select organization to view
+                org_names = list(org_balance_history.keys())
+                selected_org = st.selectbox("Select Organization to View", org_names)
+                
+                if selected_org and selected_org in org_balance_history:
+                    # Get org data
+                    org_data = next((org for org in results.get('final_org_states', []) 
+                                    if org['name'] == selected_org), {})
+                    balances = org_balance_history[selected_org]
+                    steps = list(range(len(balances)))
+                    
+                    # Create detailed organization view
+                    fig, ax = plt.subplots(figsize=(12, 6))
+                    
+                    # Balance line
+                    ax.plot(steps, balances, label=f"{selected_org} Balance", linewidth=2, 
+                            color=colors.get(selected_org, "#3498db"))
+                    
+                    # Add initial balance line
+                    if org_data.get('initial_capital'):
+                        initial_capital = org_data.get('initial_capital')
+                        ax.axhline(initial_capital, color='gray', linestyle='--', 
+                                  label=f"Initial Capital (${initial_capital:,.0f})")
+                    
+                    # Add claim trigger threshold
+                    if org_data.get('total_budget') and org_data.get('claim_trigger'):
+                        threshold = org_data.get('total_budget') * org_data.get('claim_trigger')
+                        ax.axhline(threshold, color='red', linestyle=':', 
+                                  label=f"Claim Trigger (${threshold:,.0f})")
+                    
+                    # Find claim events in event log
+                    claim_steps = []
+                    claim_amounts = []
+                    for event in results.get('detailed_events', []):
+                        if (event.get('org_name') == selected_org and 
+                            'claim' in event.get('type', '').lower() and
+                            event.get('step') is not None and 
+                            event.get('impact') is not None):
+                            claim_steps.append(event.get('step'))
+                            # Get balance at that step
+                            if 0 <= event.get('step') < len(balances):
+                                claim_amounts.append(balances[event.get('step')])
+                    
+                    # Mark claims on the chart
+                    if claim_steps and claim_amounts:
+                        ax.scatter(claim_steps, claim_amounts, color='red', s=100, zorder=5,
+                                  marker='*', label='Insurance Claims')
+                    
+                    # Configure the plot
+                    ax.set_title(f"{selected_org} ({org_data.get('org_type', '')}) Financial Performance", fontsize=14)
+                    ax.set_xlabel("Months (Steps)", fontsize=12)
+                    ax.set_ylabel("Balance ($)", fontsize=12)
+                    ax.grid(True, alpha=0.3)
+                    ax.legend()
+                    
+                    st.pyplot(fig)
+                    plt.close(fig)
+                    
+                    # Organization stats
+                    st.subheader(f"{selected_org} Statistics")
+                    col1, col2, col3 = st.columns(3)
+                    
+                    with col1:
+                        st.metric("Organization Type", org_data.get('org_type', 'Unknown'))
+                        st.metric("Initial Capital", f"${org_data.get('initial_capital', 0):,.0f}")
+                    
+                    with col2:
+                        st.metric("Final Balance", f"${org_data.get('balance', 0):,.0f}")
+                        st.metric("Total Budget", f"${org_data.get('total_budget', 0):,.0f}")
+                    
+                    with col3:
+                        initial = org_data.get('initial_capital', 0)
+                        final = org_data.get('balance', 0)
+                        change = final - initial
+                        change_pct = (change / initial * 100) if initial else 0
+                        
+                        st.metric("Net Change", 
+                                 f"${change:,.0f}", 
+                                 f"{change_pct:.1f}%",
+                                 delta_color="normal" if change >= 0 else "inverse")
+                        st.metric("Premium Paid", f"${org_data.get('premium_paid_total', 0):,.0f}")
 
     except Exception as e:
-        st.error(f"Error plotting profit and impact: {e}")
-        logger.error(f"Error in plot_profit_and_impact: {e}", exc_info=True)
+        st.error(f"Error plotting organization performance: {e}")
+        logger.error(f"Error in plot_organization_performance: {e}", exc_info=True)
 
 def display_key_insights(results):
     """Display key insights from the simulation results dictionary."""
