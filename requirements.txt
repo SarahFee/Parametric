@@ -2,8 +2,7 @@
 pandas
 numpy
 requests
-hdx-python
-iati-xml
+
 
 # Streamlit apps
 streamlit
