@@ -813,13 +813,6 @@ def display_key_insights(results):
     try:
         st.subheader("Key Insights")
 
-        # Create a white background container
-        st.markdown("""
-        <div style="background-color: white; padding: 20px; border-radius: 5px; color: black;">
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Now add content within this container
         final_orgs = results.get('final_org_states', [])
         final_insurer = results.get('final_insurer_state', {})
         event_log = results.get('event_log', [])
@@ -843,14 +836,22 @@ def display_key_insights(results):
         un_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "UN Agency"))
         hybrid_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "Hybrid"))
 
-        # Create a simple white background using Streamlit's built-in functionality
-        with st.expander("Key Simulation Insights", expanded=True):
-            # Force light background in the expander
+        # Create a white background card using Streamlit elements
+        with st.container():
+            # Create a custom style that adds padding and borders
             st.markdown("""
             <style>
-            .streamlit-expanderContent {
-                background-color: white !important;
-                color: black !important;
+            div.stMarkdown {
+                background-color: white;
+                padding: 1px 20px;
+                border-radius: 5px;
+                margin-bottom: 1px;
+            }
+            div.stMarkdown h3 {
+                color: #0066cc;
+            }
+            div.stMarkdown p, div.stMarkdown ul, div.stMarkdown li {
+                color: black;
             }
             </style>
             """, unsafe_allow_html=True)
@@ -858,40 +859,37 @@ def display_key_insights(results):
             # Create two columns
             col1, col2 = st.columns(2)
             
+            # Left column content
             with col1:
-                # Insurance Performance
-                st.markdown("### Insurance Performance", unsafe_allow_html=True)
+                # The background and styling will be applied to this panel
+                st.markdown("### Insurance Performance")
                 profit_margin = (insurer_profits / total_premiums * 100) if total_premiums > 0 else 0
+                st.write(f"• Total Premiums Collected: ${total_premiums:,.0f}")
+                st.write(f"• Claims Processed (in log): {claim_count}")
+                st.write(f"• Total Payouts Made: ${final_insurer.get('payouts_made', 0):,.0f}")
+                st.write(f"• Insurer Final Profit: ${insurer_profits:,.0f}")
+                st.write(f"• Net Profit Margin: {profit_margin:.1f}%")
                 
-                st.write("• Total Premiums Collected: ${:,.0f}".format(total_premiums))
-                st.write("• Claims Processed (in log): {}".format(claim_count))
-                st.write("• Total Payouts Made: ${:,.0f}".format(final_insurer.get('payouts_made', 0)))
-                st.write("• Insurer Final Profit: ${:,.0f}".format(insurer_profits))
-                st.write("• Net Profit Margin: {:.1f}%".format(profit_margin))
+                st.markdown("### Claims by Organization Type (logged)")
+                st.write(f"• NGO: {ngo_claims} claims")
+                st.write(f"• UN Agency: {un_claims} claims")
+                st.write(f"• Hybrid: {hybrid_claims} claims")
                 
-                # Claims by Organization Type
-                st.markdown("### Claims by Organization Type (logged)", unsafe_allow_html=True)
-                st.write("• NGO: {} claims".format(ngo_claims))
-                st.write("• UN Agency: {} claims".format(un_claims))
-                st.write("• Hybrid: {} claims".format(hybrid_claims))
-                
+            # Right column content
             with col2:
-                # Risk Events Logged
-                st.markdown("### Risk Events Logged", unsafe_allow_html=True)
+                st.markdown("### Risk Events Logged")
                 disruption_rate = (emergency_count + security_count) / sim_duration if sim_duration > 0 else 0
+                st.write(f"• Emergency events: {emergency_count}")
+                st.write(f"• Security evacuations: {security_count}")
+                st.write(f"• Total disruptions: {emergency_count + security_count}")
+                st.write(f"• Disruption rate: {disruption_rate:.1f} per month")
                 
-                st.write("• Emergency events: {}".format(emergency_count))
-                st.write("• Security evacuations: {}".format(security_count))
-                st.write("• Total disruptions: {}".format(emergency_count + security_count))
-                st.write("• Disruption rate: {:.1f} per month".format(disruption_rate))
-                
-                # Data Source Impact
-                st.markdown("### Data Source Impact", unsafe_allow_html=True)
-                st.write("• HDX Data Source: {}".format(hdx_data_source))
+                st.markdown("### Data Source Impact")
+                st.write(f"• HDX Data Source: {hdx_data_source}")
                 st.write("• Emergency Data: ACAPS INFORM Severity Index")
                 st.write("• Security Data: ACLED conflict events")
-                st.write("• IATI Data: {}".format("Yes" if results.get('iati_params') else "No"))
-        
+                st.write(f"• IATI Data: {'Yes' if results.get('iati_params') else 'No'}")
+                
     except Exception as e:
         st.error(f"Error displaying key insights: {e}")
         logger.error(f"Error in display_key_insights: {e}", exc_info=True)
