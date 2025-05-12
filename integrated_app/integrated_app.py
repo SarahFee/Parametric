@@ -100,16 +100,16 @@ def show_introduction():
     """Display an introduction panel explaining the simulator"""
     st.markdown("""
     <div class="intro-panel">
-        <h2>Welcome to the Integrated Business Continuity Insurance Simulator</h2>
-        <p>This simulator helps visualize how insurance products can protect organizations operating in high-risk environments from financial disruptions.</p>
-        <p>Organizations face regular operational costs, unexpected emergencies, and security evacuations that drain their resources. By subscribing to business continuity insurance, they can receive financial support during crisis periods.</p>
-        <p>The simulation is calibrated with real-world data from <strong>two data sources</strong>:</p>
+        <h2 style="color: #000000 !important;">Welcome to the Integrated Business Continuity Insurance Simulator</h2>
+        <p style="color: #000000 !important;">This simulator helps visualize how insurance products can protect organizations operating in high-risk environments from financial disruptions.</p>
+        <p style="color: #000000 !important;">Organizations face regular operational costs, unexpected emergencies, and security evacuations that drain their resources. By subscribing to business continuity insurance, they can receive financial support during crisis periods.</p>
+        <p style="color: #000000 !important;">The simulation is calibrated with real-world data from <strong style="color: #000000 !important;">two data sources</strong>:</p>
         <ul>
-            <li><strong>Humanitarian Data Exchange (HDX)</strong>: Security risk factors from ACLED conflict data and emergency data from ACAPS INFORM Severity Index</li>
-            <li><strong>International Aid Transparency Initiative (IATI)</strong>: For organization financial profiles</li>
+            <li style="color: #000000 !important;"><strong style="color: #000000 !important;">Humanitarian Data Exchange (HDX)</strong>: Security risk factors from ACLED conflict data and emergency data from ACAPS INFORM Severity Index</li>
+            <li style="color: #000000 !important;"><strong style="color: #000000 !important;">International Aid Transparency Initiative (IATI)</strong>: For organization financial profiles</li>
         </ul>
-        <p>This integrated approach provides more realistic parameters for World Vision (NGO), UNHCR (UN Agency), and IOM (Hybrid) operations in Sudan.</p>
-        <p>Use the parameters in the sidebar to adjust the simulation and explore different scenarios.</p>
+        <p style="color: #000000 !important;">This integrated approach provides more realistic parameters for World Vision (NGO), UNHCR (UN Agency), and IOM (Hybrid) operations in Sudan.</p>
+        <p style="color: #000000 !important;">Use the parameters in the sidebar to adjust the simulation and explore different scenarios.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1012,6 +1012,21 @@ def main():
 # Custom CSS for improved styling
 st.markdown("""
 <style>
+/* Force dark text colors for better visibility */
+.intro-panel h2, .intro-panel p, .intro-panel ul, .intro-panel li, .intro-panel strong {
+    color: #000000 !important; /* Black text */
+}
+
+.intro-panel {
+    background-color: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    color: #000000 !important; /* Force black text on the container */
+}
+
+/* Original CSS preserved */
 .metric-box {
     border: 1px solid #e0e0e0;
     border-radius: 5px;
@@ -1055,18 +1070,22 @@ st.markdown("""
     margin-right: 10px;
     color: #7f8c8d;
 }
-.intro-panel {
-    background-color: #f8f9fa;
-    border-left: 4px solid #007bff;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-}
 .parameter-title {
     font-size: 18px;
     font-weight: bold;
     margin-top: 15px;
     margin-bottom: 10px;
+}
+
+/* Additional Streamlit-specific selectors to force dark text */
+.css-1fv8s86 p, .css-1fv8s86 h1, .css-1fv8s86 h2, .css-1fv8s86 h3, 
+.css-1fv8s86 li, .css-1fv8s86 span, .css-1fv8s86 div {
+    color: #000000 !important; 
+}
+
+/* Fix for Streamlit markdown text */
+.stMarkdown, .stMarkdown p, .stMarkdown li, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    color: #000000 !important;
 }
 </style>
 """, unsafe_allow_html=True)
