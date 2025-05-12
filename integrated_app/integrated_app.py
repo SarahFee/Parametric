@@ -836,68 +836,55 @@ def display_key_insights(results):
         un_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "UN Agency"))
         hybrid_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "Hybrid"))
 
-        # Create a more direct white background panel using HTML
-        html_content = """
-        <div style="background-color: white; color: black; padding: 20px; border-radius: 5px; margin: 10px 0;">
-            <div style="display: flex; flex-wrap: wrap;">
-                <!-- Left Column -->
-                <div style="flex: 1; min-width: 300px; margin-right: 20px;">
-                    <h3 style="color: #0066cc; margin-top: 0;">Insurance Performance</h3>
-                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
-                        <li>Total Premiums Collected: ${:,.0f}</li>
-                        <li>Claims Processed (in log): {}</li>
-                        <li>Total Payouts Made: ${:,.0f}</li>
-                        <li>Insurer Final Profit: ${:,.0f}</li>
-                        <li>Net Profit Margin: {:.1f}%</li>
-                    </ul>
-                    
-                    <h3 style="color: #0066cc; margin-top: 20px;">Claims by Organization Type (logged)</h3>
-                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
-                        <li>NGO: {} claims</li>
-                        <li>UN Agency: {} claims</li>
-                        <li>Hybrid: {} claims</li>
-                    </ul>
-                </div>
+        # Create a container with a white background
+        with st.container():
+            # Apply custom styling to the container
+            st.markdown("""
+            <style>
+            .stContainer {
+                background-color: white;
+                padding: 20px;
+                border-radius: 5px;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+            
+            # Create two columns
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # Insurance Performance
+                st.markdown("### Insurance Performance")
+                profit_margin = (insurer_profits / total_premiums * 100) if total_premiums > 0 else 0
                 
-                <!-- Right Column -->
-                <div style="flex: 1; min-width: 300px;">
-                    <h3 style="color: #0066cc; margin-top: 0;">Risk Events Logged</h3>
-                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
-                        <li>Emergency events: {}</li>
-                        <li>Security evacuations: {}</li>
-                        <li>Total disruptions: {}</li>
-                        <li>Disruption rate: {:.1f} per month</li>
-                    </ul>
-                    
-                    <h3 style="color: #0066cc; margin-top: 20px;">Data Source Impact</h3>
-                    <ul style="list-style-type: disc; margin-left: 20px; padding-left: 0;">
-                        <li>HDX Data Source: {}</li>
-                        <li>Emergency Data: ACAPS INFORM Severity Index</li>
-                        <li>Security Data: ACLED conflict events</li>
-                        <li>IATI Data: {}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        """.format(
-            total_premiums,
-            claim_count,
-            final_insurer.get('payouts_made', 0),
-            insurer_profits,
-            (insurer_profits / total_premiums * 100) if total_premiums > 0 else 0,
-            ngo_claims,
-            un_claims,
-            hybrid_claims,
-            emergency_count,
-            security_count,
-            emergency_count + security_count,
-            (emergency_count + security_count) / sim_duration if sim_duration > 0 else 0,
-            hdx_data_source,
-            "Yes" if results.get('iati_params') else "No"
-        )
-        
-        # Display the HTML content
-        st.markdown(html_content, unsafe_allow_html=True)
+                st.markdown("- Total Premiums Collected: ${:,.0f}".format(total_premiums))
+                st.markdown("- Claims Processed (in log): {}".format(claim_count))
+                st.markdown("- Total Payouts Made: ${:,.0f}".format(final_insurer.get('payouts_made', 0)))
+                st.markdown("- Insurer Final Profit: ${:,.0f}".format(insurer_profits))
+                st.markdown("- Net Profit Margin: {:.1f}%".format(profit_margin))
+                
+                # Claims by Organization Type
+                st.markdown("### Claims by Organization Type (logged)")
+                st.markdown("- NGO: {} claims".format(ngo_claims))
+                st.markdown("- UN Agency: {} claims".format(un_claims))
+                st.markdown("- Hybrid: {} claims".format(hybrid_claims))
+                
+            with col2:
+                # Risk Events Logged
+                st.markdown("### Risk Events Logged")
+                disruption_rate = (emergency_count + security_count) / sim_duration if sim_duration > 0 else 0
+                
+                st.markdown("- Emergency events: {}".format(emergency_count))
+                st.markdown("- Security evacuations: {}".format(security_count))
+                st.markdown("- Total disruptions: {}".format(emergency_count + security_count))
+                st.markdown("- Disruption rate: {:.1f} per month".format(disruption_rate))
+                
+                # Data Source Impact
+                st.markdown("### Data Source Impact")
+                st.markdown("- HDX Data Source: {}".format(hdx_data_source))
+                st.markdown("- Emergency Data: ACAPS INFORM Severity Index")
+                st.markdown("- Security Data: ACLED conflict events")
+                st.markdown("- IATI Data: {}".format("Yes" if results.get('iati_params') else "No"))
         
     except Exception as e:
         st.error(f"Error displaying key insights: {e}")
