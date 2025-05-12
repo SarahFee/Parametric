@@ -3,6 +3,7 @@ pandas
 numpy
 requests
 mesa
+mesa.time
 
 # Streamlit apps
 streamlit
