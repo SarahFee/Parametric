@@ -569,26 +569,49 @@ def display_metrics(results):
         logger.error(f"Error in display_metrics: {e}", exc_info=True)
 
 def plot_continuity_impact(results):
-    """Plot the aggregate organization balance over time from results."""
+    """Plot individual organization balances over time from results."""
     try:
-        history = results.get('history', [])
-        if not history:
-            st.warning("No history data available in results to plot continuity impact.")
+        org_balance_history = results.get('org_balance_history', {})
+        if not org_balance_history:
+            st.warning("No organization balance history data available to plot.")
             return
 
         fig, ax = plt.subplots(figsize=(10, 6))
-        time_steps = list(range(len(history))) # Steps 0 to N-1
-        ax.plot(time_steps, history, color='#3498db', linewidth=2.5)
-        ax.set_title("Aggregate Organization Balance Over Time", fontsize=14)
+        
+        # Define colors for different organization types
+        colors = {
+            "World-Vision": "#3498db",  # NGO - Blue
+            "UNHCR": "#2ecc71",         # UN Agency - Green
+            "IOM": "#9b59b6"            # Hybrid - Purple
+        }
+        
+        # Get org_types from final_org_states
+        org_types = {}
+        for org in results.get('final_org_states', []):
+            org_types[org['name']] = org['org_type']
+        
+        # Plot each organization separately with its own line
+        for org_name, balances in org_balance_history.items():
+            time_steps = list(range(len(balances)))
+            org_type = org_types.get(org_name, "")
+            label = f"{org_name} ({org_type})"
+            color = colors.get(org_name, "#7f8c8d")  # Default gray if not found
+            
+            ax.plot(time_steps, balances, color=color, linewidth=2.5, label=label)
+        
+        ax.set_title("Organization Balances Over Time", fontsize=14)
         ax.set_xlabel("Months (Steps)", fontsize=12)
-        ax.set_ylabel("Total Balance ($)", fontsize=12)
+        ax.set_ylabel("Balance ($)", fontsize=12)
         ax.grid(True, alpha=0.3)
+        ax.legend()
+        
         st.markdown('<div class="plot-container">', unsafe_allow_html=True)
         st.pyplot(fig)
-        plt.close(fig) # Close figure
+        plt.close(fig)  # Close figure
         st.markdown('</div>', unsafe_allow_html=True)
+        
     except Exception as e:
-        st.error(f"Error plotting continuity impact: {e}")
+        st.error(f"Error plotting organization balances: {e}")
         logger.error(f"Error in plot_continuity_impact: {e}", exc_info=True)
 
 def plot_profit_and_impact(results):
