@@ -10,6 +10,13 @@ import logging
 import traceback
 from datetime import datetime
 import transparent_viz
+
+# Initialize session state for storing simulation results
+if 'simulation_results' not in st.session_state:
+    st.session_state.simulation_results = None
+if 'params' not in st.session_state:
+    st.session_state.params = None
+
 # Configure the page (must be the first Streamlit command)
 st.set_page_config(
     page_title="Integrated Business Continuity Insurance",
@@ -906,32 +913,67 @@ def display_event_log(results):
             st.warning("No simulation event logs available in results.")
             return
 
-        # Add filtering options
+        # Initialize session state for filter values if they don't exist
+        if 'event_log_type_filter' not in st.session_state:
+            st.session_state.event_log_type_filter = "All Events"
+        if 'event_log_org_filter' not in st.session_state:
+            st.session_state.event_log_org_filter = "All Participants"
+        if 'event_log_step_filter' not in st.session_state:
+            max_step = sim_duration - 1
+            st.session_state.event_log_step_filter = (0, max_step)
+
+        # Add filtering options that update session state
         col1, col2, col3 = st.columns(3)
         with col1:
             # Use a unique key by adding a prefix or suffix
             log_filter = st.selectbox(
                 "Filter by event type:",
                 ["All Events", "Claims", "Premium", "Emergencies", "Security Events", "Donations", "Funds Received", "Operations Cost"],
-                key="event_log_type_filter_main"  # Changed key to be unique
+                key="event_log_type_filter_select",
+                index=["All Events", "Claims", "Premium", "Emergencies", "Security Events", "Donations", "Funds Received", "Operations Cost"].index(st.session_state.event_log_type_filter)
             )
+            # Update session state
+            st.session_state.event_log_type_filter = log_filter
+            
         with col2:
             org_names = [org.get('name', 'Unknown') for org in org_states]
+            org_filter_options = ["All Participants"] + org_names + ["Donors", "ParaInsure"]
+            try:
+                org_filter_index = org_filter_options.index(st.session_state.event_log_org_filter)
+            except ValueError:
+                org_filter_index = 0  # Default to "All Participants" if not found
+                
             org_filter = st.selectbox(
                 "Filter by participant:",
-                ["All Participants"] + org_names + ["Donors", "ParaInsure"],
-                key="event_log_org_filter_main"  # Changed key to be unique
+                org_filter_options,
+                key="event_log_org_filter_select",
+                index=org_filter_index
             )
+            # Update session state
+            st.session_state.event_log_org_filter = org_filter
+            
         with col3:
-            max_step = sim_duration  # Use duration as max step
+            max_step = max(1, sim_duration - 1)
+            current_filter = st.session_state.event_log_step_filter
+            
+            # Ensure filter is within valid range
+            min_step = min(max(0, current_filter[0]), max_step)
+            max_step_filter = min(max(min_step, current_filter[1]), max_step)
+            
             step_filter = st.slider(
                 "Filter by step (month):",
-                0, max(1, max_step - 1), (0, max(1, max_step - 1)),
-                key="event_log_step_filter_main"  # Changed key to be unique
-            )  # Steps 0 to N-1
+                0, max_step, (min_step, max_step_filter),
+                key="event_log_step_filter_slider"
+            )
+            # Update session state
+            st.session_state.event_log_step_filter = step_filter
 
-        
+        # Now use the filter values from session state
+        log_filter = st.session_state.event_log_type_filter
+        org_filter = st.session_state.event_log_org_filter
+        step_filter = st.session_state.event_log_step_filter
 
+        # Rest of your filtering logic remains the same
         filtered_logs = event_log.copy()
 
         # Filter by event type
@@ -961,7 +1003,10 @@ def display_event_log(results):
             min_step <= int(log[log.find(" ") + 1: log.find("]")]) <= max_step_filter
         ]
 
+        # Display filtered logs
         st.write(f"Showing {len(filtered_logs)} of {len(event_log)} total event log entries")
+        
+        # Rest of your display code remains the same
         st.markdown('<div class="log-container">', unsafe_allow_html=True)
         if not filtered_logs:
             st.markdown('<div class="log-entry">No simulation event log entries match filter criteria.</div>', unsafe_allow_html=True)
@@ -1125,71 +1170,93 @@ def main():
     with run_col2:
         show_details = st.checkbox("Show details during run", value=True, 
                                 help="Displays detailed information during simulation run")
-    
-    if run_button:
+
+    # Check if we should run a new simulation or use cached results
+    run_new_simulation = run_button
+    display_saved_results = st.session_state.simulation_results is not None
+
+    if run_new_simulation:
         try:
             # Run the model
             results = run_model_and_get_results(params)
 
             if results:
-                # Display various analyses and visualizations
-                st.markdown("## Simulation Results")
+                # Save results and parameters to session state
+                st.session_state.simulation_results = results
+                st.session_state.params = params.copy()
+                display_saved_results = True  # Set flag to display results
+            else:
+                st.error("Simulation failed. Please check the logs for more information.")
 
-                # Metrics
-                display_metrics(results)
+        except Exception as e:
+            st.error(f"An unexpected error occurred during simulation: {e}")
+            logger.error(f"Unexpected error in main simulation: {e}", exc_info=True)
 
-                # Continuity Impact Plot
-                plot_continuity_impact(results)
+    # Display saved results (either from a new run or from cache)
+    if display_saved_results:
+        try:
+            # Get results and parameters from session state
+            results = st.session_state.simulation_results
+            saved_params = st.session_state.params
+            
+            # Display various analyses and visualizations
+            st.markdown("## Simulation Results")
 
-                # Profit and Impact Plot
-                plot_profit_and_impact(results)
+            # Metrics
+            display_metrics(results)
 
-                # Key Insights
-                display_key_insights(results)
+            # Continuity Impact Plot
+            plot_continuity_impact(results)
 
-                # Event Log
-                display_event_log(results)
+            # Profit and Impact Plot
+            plot_profit_and_impact(results)
 
-                st.markdown("## Model Explanation")
-                try:
-                    # Just display the text part first without full visualization
-                    st.markdown("### How Claim Triggers Work")
-                    st.markdown(f"""
-                    Organizations can make insurance claims when their balance drops below a certain threshold.
-                    - Current claim trigger: {params.get('claim_trigger', 0.5) * 100:.0f}% of budget
-                    - Waiting period: {params.get('waiting_period', 2)} months between claims
-                    """)
-                except Exception as e:
-                    st.error(f"Error in basic explanation: {e}")
-                    logger.error(f"Error in basic explanation: {e}", exc_info=True)
+            # Key Insights
+            display_key_insights(results)
 
-                st.markdown("## Organization Claim Thresholds")
-                gauge_cols = st.columns(len(results['final_org_states']))
-                for i, org in enumerate(results['final_org_states']):
-                    with gauge_cols[i]:
-                        try:
-                            # Use .get() with default values for all parameters to prevent errors
-                            gauge_fig = transparent_viz.create_threshold_gauge(
-                                org.get('name', f"Organization {i+1}"), 
-                                org.get('org_type', "Unknown"), 
-                                org.get('balance', 0), 
-                                org.get('total_budget', 100000), 
-                                org.get('claim_trigger', 0.5)  # Default to 0.5 if missing
-                            )
-                            st.plotly_chart(gauge_fig, use_container_width=True)
-                        except Exception as e:
-                            st.error(f"Error creating gauge for {org.get('name', f'Organization {i+1}')}: {e}")
-                            logger.error(f"Error in gauge visualization: {e}", exc_info=True)
+            # Event Log
+            display_event_log(results)
 
-                # ACAPS Data Insights
-                display_acaps_insights(results)
+            st.markdown("## Model Explanation")
+            try:
+                # Just display the text part first without full visualization
+                st.markdown("### How Claim Triggers Work")
+                st.markdown(f"""
+                Organizations can make insurance claims when their balance drops below a certain threshold.
+                - Current claim trigger: {saved_params.get('claim_trigger', 0.5) * 100:.0f}% of budget
+                - Waiting period: {saved_params.get('waiting_period', 2)} months between claims
+                """)
+            except Exception as e:
+                st.error(f"Error in basic explanation: {e}")
+                logger.error(f"Error in basic explanation: {e}", exc_info=True)
 
-                # Impact Visualizations
-                display_impact_visualizations(results)
+            st.markdown("## Organization Claim Thresholds")
+            gauge_cols = st.columns(len(results['final_org_states']))
+            for i, org in enumerate(results['final_org_states']):
+                with gauge_cols[i]:
+                    try:
+                        # Use .get() with default values for all parameters to prevent errors
+                        gauge_fig = transparent_viz.create_threshold_gauge(
+                            org.get('name', f"Organization {i+1}"), 
+                            org.get('org_type', "Unknown"), 
+                            org.get('balance', 0), 
+                            org.get('total_budget', 100000), 
+                            org.get('claim_trigger', 0.5)  # Default to 0.5 if missing
+                        )
+                        st.plotly_chart(gauge_fig, use_container_width=True)
+                    except Exception as e:
+                        st.error(f"Error creating gauge for {org.get('name', f'Organization {i+1}')}: {e}")
+                        logger.error(f"Error in gauge visualization: {e}", exc_info=True)
 
-                # Application Logs
-                if show_details:
-                    display_logs()
+            # ACAPS Data Insights
+            display_acaps_insights(results)
+
+            # Impact Visualizations
+            display_impact_visualizations(results)
+
+            # Application Logs
+            if show_details:
+                display_logs()
             else:
                 st.error("Simulation failed. Please check the logs for more information.")
 
