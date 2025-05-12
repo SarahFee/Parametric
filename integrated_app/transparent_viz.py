@@ -34,7 +34,6 @@ def create_threshold_gauge(org_name, org_type, current_balance, total_budget, cl
     current_percentage = (current_balance / total_budget) * 100
     threshold_percentage = claim_trigger * 100
     
-    
     # Define colors and zones
     danger_zone = threshold_percentage
     warning_zone = threshold_percentage + 15
@@ -43,7 +42,7 @@ def create_threshold_gauge(org_name, org_type, current_balance, total_budget, cl
     fig = go.Figure(go.Indicator(
         mode="gauge+number+delta",
         value=current_percentage,
-        domain={'x': [0, 1], 'y': [0, 1]},
+        domain={'x': [0, 1], 'y': [0, 0.75]},  # Reduce gauge height to 75% of space
         title={'text': f"{org_name} ({org_type})<br><span style='font-size:0.8em;'>Balance as % of Budget</span>"},
         delta={'reference': threshold_percentage, 'increasing': {'color': 'green'}, 'decreasing': {'color': 'red'}},
         gauge={
@@ -65,7 +64,7 @@ def create_threshold_gauge(org_name, org_type, current_balance, total_budget, cl
         }
     ))
     
-    # Add annotations
+    # Add annotations for threshold info
     fig.add_annotation(
         x=0.5, y=0.15,
         text=f"Claim Trigger: {threshold_percentage:.1f}%<br>Current: {current_percentage:.1f}%",
@@ -73,6 +72,7 @@ def create_threshold_gauge(org_name, org_type, current_balance, total_budget, cl
         font=dict(size=12)
     )
     
+    # Determine claim eligibility
     if current_percentage < threshold_percentage:
         claim_status = "ELIGIBLE FOR CLAIM"
         claim_color = "red"
@@ -80,17 +80,22 @@ def create_threshold_gauge(org_name, org_type, current_balance, total_budget, cl
         claim_status = "NOT ELIGIBLE FOR CLAIM"
         claim_color = "green"
     
+    # Add claim status at the bottom of the chart, under the gauge
     fig.add_annotation(
-        x=0.5, y=0.3,
+        x=0.5, y=0.9,  # Position at bottom of chart (90% down)
         text=claim_status,
         showarrow=False,
-        font=dict(size=14, color=claim_color, family="Arial Black")
+        font=dict(size=14, color=claim_color, family="Arial Black"),
+        bgcolor="rgba(255, 255, 255, 0.9)",  # Add white background for better contrast
+        bordercolor=claim_color,
+        borderwidth=1,
+        borderpad=4
     )
     
-    # Update layout
+    # Update layout with larger bottom margin to fit the status text
     fig.update_layout(
-        height=300,
-        margin=dict(l=20, r=20, t=50, b=20),
+        height=350,  # Increase height slightly
+        margin=dict(l=20, r=20, t=50, b=50),  # More bottom margin
     )
     
     return fig
