@@ -13,7 +13,7 @@ matplotlib
 # MCP-based sensitivity analysis
 langchain
 openai
-togetherai
+together
 faiss-cpu
 
 # Environment variable management
