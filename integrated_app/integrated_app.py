@@ -836,37 +836,70 @@ def display_key_insights(results):
         un_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "UN Agency"))
         hybrid_claims = sum(1 for log in event_log if "made a claim" in log.lower() and any(name in log for name, type in org_names.items() if type == "Hybrid"))
 
-        col1, col2 = st.columns(2)
-        with col1:
-            profit_margin = (insurer_profits / total_premiums * 100) if total_premiums > 0 else 0
-            st.markdown(f"""
-            **Insurance Performance**
-            - Total Premiums Collected: ${total_premiums:,.0f}
-            - Claims Processed (in log): {claim_count}
-            - Total Payouts Made: ${final_insurer.get('payouts_made', 0):,.0f}
-            - Insurer Final Profit: ${insurer_profits:,.0f}
-            - Net Profit Margin: {profit_margin:.1f}%
+        # Apply a white background panel with black text for better visibility
+        st.markdown("""
+        <style>
+        .insights-panel {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .insights-panel h3 {
+            color: #0066cc;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .insights-panel ul {
+            margin-left: 20px;
+            padding-left: 20px;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
-            **Claims by Organization Type (logged)**
-            - NGO: {ngo_claims} claims
-            - UN Agency: {un_claims} claims
-            - Hybrid: {hybrid_claims} claims
-            """)
-        with col2:
-            disruption_rate = (emergency_count + security_count) / sim_duration if sim_duration > 0 else 0
-            st.markdown(f"""
-            **Risk Events Logged**
-            - Emergency events: {emergency_count}
-            - Security evacuations: {security_count}
-            - Total disruptions: {emergency_count + security_count}
-            - Disruption rate: {disruption_rate:.1f} per month
+        # Create two columns for the insights
+        col1_md = []
+        col2_md = []
+        
+        # Column 1 content
+        col1_md.append("### Insurance Performance")
+        profit_margin = (insurer_profits / total_premiums * 100) if total_premiums > 0 else 0
+        col1_md.append("- Total Premiums Collected: ${:,.0f}".format(total_premiums))
+        col1_md.append("- Claims Processed (in log): {}".format(claim_count))
+        col1_md.append("- Total Payouts Made: ${:,.0f}".format(final_insurer.get('payouts_made', 0)))
+        col1_md.append("- Insurer Final Profit: ${:,.0f}".format(insurer_profits))
+        col1_md.append("- Net Profit Margin: {:.1f}%".format(profit_margin))
+        
+        col1_md.append("\n### Claims by Organization Type (logged)")
+        col1_md.append("- NGO: {} claims".format(ngo_claims))
+        col1_md.append("- UN Agency: {} claims".format(un_claims))
+        col1_md.append("- Hybrid: {} claims".format(hybrid_claims))
 
-            **Data Source Impact**
-            - HDX Data Source: {hdx_data_source}
-            - Emergency Data: ACAPS INFORM Severity Index
-            - Security Data: ACLED conflict events
-            - IATI Data: {'Yes' if results.get('iati_params') else 'No'}
-            """)
+        # Column 2 content
+        col2_md.append("### Risk Events Logged")
+        disruption_rate = (emergency_count + security_count) / sim_duration if sim_duration > 0 else 0
+        col2_md.append("- Emergency events: {}".format(emergency_count))
+        col2_md.append("- Security evacuations: {}".format(security_count))
+        col2_md.append("- Total disruptions: {}".format(emergency_count + security_count))
+        col2_md.append("- Disruption rate: {:.1f} per month".format(disruption_rate))
+        
+        col2_md.append("\n### Data Source Impact")
+        col2_md.append("- HDX Data Source: {}".format(hdx_data_source))
+        col2_md.append("- Emergency Data: ACAPS INFORM Severity Index")
+        col2_md.append("- Security Data: ACLED conflict events")
+        col2_md.append("- IATI Data: {}".format("Yes" if results.get('iati_params') else "No"))
+
+        # Create the panel with two columns
+        st.markdown('<div class="insights-panel">', unsafe_allow_html=True)
+        cols = st.columns(2)
+        with cols[0]:
+            st.markdown("\n".join(col1_md), unsafe_allow_html=True)
+        with cols[1]:
+            st.markdown("\n".join(col2_md), unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
     except Exception as e:
         st.error(f"Error displaying key insights: {e}")
         logger.error(f"Error in display_key_insights: {e}", exc_info=True)
