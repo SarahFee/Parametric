@@ -93,17 +93,17 @@ class ACLEDClient:
         try:
             # ACLED API parameters for Sudan conflict data
             params = {
+                'key': self.access_token,
+                'email': 'your_email@example.com',  # User needs to provide correct email
                 'country': 'Sudan',
                 'year': year,
-                'event_type': ['Violence against civilians', 'Battles', 'Explosions/Remote violence'],
-                'page': 1,
-                'page_size': 1000
+                'event_type': 'Violence against civilians|Battles|Explosions/Remote violence',
+                'limit': 1000
             }
             
             logger.info(f"Fetching ACLED conflict data for Sudan {year}")
             response = requests.get(
-                f"{self.base_url}/acled/read",
-                headers=self._get_headers(),
+                "https://api.acleddata.com/acled/read",
                 params=params,
                 timeout=30
             )

@@ -22,8 +22,31 @@ SUDAN_BOUNDS = {
     "east": 38.5, "west": 21.8
 }
 
+def load_integrated_data(use_acled_emergency=False, use_acaps_security=False, use_dtm_emergency=False):
+    """Load data from enhanced integrations"""
+    try:
+        from enhanced_hdx_integration import get_enhanced_hdx_parameters
+        
+        # Get data from enhanced integration
+        integrated_data = get_enhanced_hdx_parameters(
+            use_acled_emergency=use_acled_emergency,
+            use_acaps_security=use_acaps_security,
+            use_dtm_emergency=use_dtm_emergency
+        )
+        
+        if integrated_data:
+            emergency_data = integrated_data.get('emergency_parameters')
+            security_data = integrated_data.get('security_parameters')
+            dtm_data = integrated_data.get('dtm_parameters')
+            return emergency_data, security_data, dtm_data
+        
+        return None, None, None
+    except Exception as e:
+        st.error(f"Error loading integrated data: {e}")
+        return None, None, None
+
 def load_hdx_data():
-    """Load and process HDX data from cache files"""
+    """Load and process HDX data from cache files (legacy fallback)"""
     try:
         # Load HAPI/ACLED data (for Emergency events) and ACAPS data (for Security events)
         hapi_file = os.path.join("hdx_cache", "hapi_acled_security_data.json")
@@ -55,8 +78,36 @@ def generate_map_events(emergency_data, security_data, dtm_data=None):
     """Generate synthetic geographic events from the HDX data for visualization"""
     events = []
     
-    # Generate Emergency events from HAPI/ACLED data
-    if emergency_data and 'event_type_distribution' in emergency_data:
+    # Generate ACLED Emergency events (new enhanced integration)
+    if emergency_data and emergency_data.get('data_source') == 'ACLED API':
+        # Handle ACLED data from enhanced integration
+        conflict_stats = emergency_data.get('conflict_statistics', {})
+        monthly_factors = emergency_data.get('monthly_risk_factors', {})
+        
+        # Generate events based on conflict statistics
+        total_events = max(conflict_stats.get('total_events', 0), 3)  # Show at least 3 for visualization
+        emergency_prob = emergency_data.get('emergency_probability', 0.25)
+        
+        for month_idx, (month, factor) in enumerate(monthly_factors.items(), 1):
+            # Create conflict events for visualization
+            num_events = max(1, int(total_events * factor / 12))  # Distribute across months
+            
+            for i in range(num_events):
+                events.append({
+                    'type': 'Emergency',
+                    'event_type': 'Armed Conflict',
+                    'month': month,
+                    'month_idx': month_idx,
+                    'lat': SUDAN_CENTER['lat'] + np.random.uniform(-3, 3),
+                    'lon': SUDAN_CENTER['lon'] + np.random.uniform(-4, 4),
+                    'severity': emergency_prob,
+                    'description': f"Conflict Event: ACLED data shows {emergency_prob:.1%} emergency probability for {month}",
+                    'source': 'ACLED Conflict Data',
+                    'color': '#FF4444'  # Red for conflict
+                })
+    
+    # Generate Emergency events from HAPI/ACLED data (legacy)
+    elif emergency_data and 'event_type_distribution' in emergency_data:
         event_types = emergency_data['event_type_distribution']
         monthly_factors = emergency_data.get('monthly_risk_factors', {})
         
@@ -332,15 +383,24 @@ def main(use_acled_emergency=False, use_acaps_security=False, use_dtm_emergency=
     
     # Load data based on user selections
     with st.spinner("Loading HDX data..."):
-        emergency_data, security_data, dtm_data = load_hdx_data()
+        # Load data from enhanced integrations when available
+        emergency_data, security_data, dtm_data = load_integrated_data(
+            use_acled_emergency=use_acled_emergency,
+            use_acaps_security=use_acaps_security, 
+            use_dtm_emergency=use_dtm_emergency
+        )
         
-        # Filter data based on user selections
-        if not use_acled_emergency:
-            emergency_data = None
-        if not use_acaps_security:
-            security_data = None  
-        if not use_dtm_emergency:
-            dtm_data = None
+        # Fallback to legacy data if integrated data not available
+        if not emergency_data and not security_data and not dtm_data:
+            emergency_data, security_data, dtm_data = load_hdx_data()
+            
+            # Filter data based on user selections for legacy data
+            if not use_acled_emergency:
+                emergency_data = None
+            if not use_acaps_security:
+                security_data = None  
+            if not use_dtm_emergency:
+                dtm_data = None
     
     if not emergency_data and not security_data and not dtm_data:
         st.error("No data available. Please ensure the simulation has been run with HDX or DTM data enabled.")
