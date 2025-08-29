@@ -27,7 +27,7 @@ def load_hdx_data():
     try:
         # Load HAPI/ACLED data (for Emergency events) and ACAPS data (for Security events)
         hapi_file = os.path.join("hdx_cache", "hapi_acled_security_data.json")
-        acaps_file = os.path.join("hdx_cache", "acaps_security_data.json")
+        acaps_file = os.path.join("hdx_cache", "acaps_emergency_data.json")
         dtm_file = os.path.join("hdx_cache", "dtm_sudan_displacement.json")
         
         emergency_data = None
