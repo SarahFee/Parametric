@@ -20,3 +20,16 @@ together
 faiss-cpu
 
 
+altair
+faiss-cpu
+langchain
+matplotlib
+mesa==0.9.0
+numpy
+openai
+pandas
+plotly
+python-dotenv
+requests
+streamlit
+together

@@ -1,0 +1,12 @@
+[server]
+port = 5000
+address = "0.0.0.0"
+enableCORS = false
+enableXsrfProtection = false
+allowedOrigins = ["*"]
+
+[browser]
+gatherUsageStats = false
+
+[global]
+developmentMode = false
