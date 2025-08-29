@@ -148,7 +148,16 @@ def get_security_parameters_from_hdx():
     return params
 
 # Combine parameters
-def get_all_hdx_parameters():
+def get_all_hdx_parameters(use_hapi_emergency=False, use_acaps_security=False, use_dtm_emergency=False):
+    # If DTM is selected, use enhanced integration
+    if use_dtm_emergency:
+        try:
+            from enhanced_hdx_integration import get_enhanced_hdx_parameters
+            logger.info("Using enhanced HDX+DTM integration")
+            return get_enhanced_hdx_parameters(use_hapi_emergency, use_acaps_security, use_dtm_emergency)
+        except ImportError:
+            logger.warning("Enhanced integration not available")
+
     security_params = get_security_parameters_from_hdx()
     emergency_params = get_emergency_parameters_from_hdx()
     if not security_params:

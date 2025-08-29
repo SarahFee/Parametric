@@ -102,19 +102,23 @@ def combine_emergency_data_sources(hapi_params, dtm_params):
         logger.error(f"Error combining emergency data sources: {e}", exc_info=True)
         return hapi_params
 
-def get_enhanced_hdx_parameters():
+def get_enhanced_hdx_parameters(use_hapi_emergency=True, use_acaps_security=True, use_dtm_emergency=True):
     """
-    Get HDX parameters with DTM integration:
-    - Emergency: Combined HAPI/ACLED + DTM displacement data  
-    - Security: ACAPS INFORM Severity Index data
+    Get HDX parameters with DTM integration based on user selections:
+    - Emergency: Combined HAPI/ACLED + DTM displacement data (based on selections)
+    - Security: ACAPS INFORM Severity Index data (based on selections)
     """
     try:
-        # Get HAPI/ACLED data (conflict events) - now for emergency
-        hapi_params = get_security_parameters_from_hdx()
+        # Get HAPI/ACLED data (conflict events) - only if user selected it
+        hapi_params = None
+        if use_hapi_emergency:
+            hapi_params = get_security_parameters_from_hdx()
+            if hapi_params:
+                logger.info("Successfully fetched HAPI/ACLED parameters for emergency")
         
-        # Get DTM displacement data for emergency
+        # Get DTM displacement data for emergency - only if user selected it
         dtm_params = None
-        if DTM_AVAILABLE:
+        if use_dtm_emergency and DTM_AVAILABLE:
             try:
                 dtm_params = dtm_integration.get_dtm_emergency_parameters()
                 logger.info("Successfully fetched DTM displacement parameters")
@@ -125,15 +129,22 @@ def get_enhanced_hdx_parameters():
         # Combine HAPI and DTM for emergency parameters
         emergency_params = combine_emergency_data_sources(hapi_params, dtm_params)
         
-        # Get ACAPS data for security parameters  
-        security_params = get_emergency_parameters_from_hdx()
-        
-        if not security_params:
-            logger.warning("Using fallback simulated security parameters.")
+        # Get ACAPS data for security parameters - only if user selected it
+        security_params = None
+        if use_acaps_security:
             security_params = get_emergency_parameters_from_hdx()
+            if security_params:
+                logger.info("Successfully fetched ACAPS parameters for security")
+            else:
+                logger.warning("Failed to fetch ACAPS security parameters.")
+        
+        # If user selected DTM but not other emergency sources, ensure emergency_params is DTM-only
+        if use_dtm_emergency and not use_hapi_emergency and not emergency_params:
+            emergency_params = dtm_params
 
-        if not emergency_params or not security_params:
-            logger.error("Failed to fetch parameters.")
+        # Allow DTM-only or ACAPS-only modes
+        if not emergency_params and not security_params:
+            logger.error("Failed to fetch any parameters.")
             return None
 
         return {

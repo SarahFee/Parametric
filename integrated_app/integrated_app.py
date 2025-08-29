@@ -335,7 +335,11 @@ def fetch_hdx_data(api_key, show_spinner=True):
             logger.info(f"Fetching HDX data with API key {api_key[:4]}...")
             
             # Use the module to call the function
-            hdx_data = hdx_integration.get_all_hdx_parameters()
+            hdx_data = hdx_integration.get_all_hdx_parameters(
+                use_hapi_emergency=params.get("use_hapi_emergency_data", False),
+                use_acaps_security=params.get("use_acaps_security_data", False),
+                use_dtm_emergency=params.get("use_dtm_emergency_data", False)
+            )
             
             if hdx_data:
                 logger.info("Successfully fetched HDX data")
