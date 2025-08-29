@@ -1,0 +1,1447 @@
+{
+  "emergency_probability": 0.5945945945945946,
+  "crisis_percentage": 0.0,
+  "emergency_percentage": 0.32432432432432434,
+  "catastrophe_percentage": 0.2702702702702703,
+  "emergency_probability_modifiers": {
+    "NGO": 1.2,
+    "UN Agency": 0.7,
+    "Hybrid": 1.0
+  },
+  "emergency_impact": {
+    "NGO": 0.08,
+    "UN Agency": 0.15,
+    "Hybrid": 0.1
+  },
+  "data_source": "ACAPS INFORM Severity Index",
+  "data_source_timestamp": "2025-08-29 12:50:07",
+  "raw_acaps_data": [
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.4,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.4,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.2,
+      "Conditions of affected people": 4.5,
+      "People in need": 5.0,
+      "Concentration of conditions": 4.0,
+      "Complexity": 4.1,
+      "Society and safety": 4.2,
+      "Operating environment": 4.0,
+      "Last updated": "2023-01-24",
+      "_internal_filter_date": "2023-01-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.3,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.3,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.7,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.3,
+      "Society and safety": 4.2,
+      "Operating environment": 2.0,
+      "Last updated": "2023-01-24",
+      "_internal_filter_date": "2023-01-01"
+    },
+    {
+      "crisis_id": "SDN006",
+      "crisis_name": "Floods in Sudan ",
+      "connected_crises": null,
+      "drivers": [
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 2.8,
+      "INFORM Severity category (numeric)": 3.0,
+      "INFORM Severity category": "Medium",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 4.8,
+      "Human Impact": 2.8,
+      "Conditions of affected people": 1.5,
+      "People in need": 1.9,
+      "Concentration of conditions": 1.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.2,
+      "Operating environment": 3.5,
+      "Last updated": "2023-01-24",
+      "_internal_filter_date": "2023-01-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.0,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 3.1,
+      "Human Impact": 3.9,
+      "Conditions of affected people": 4.4,
+      "People in need": 4.8,
+      "Concentration of conditions": 4.0,
+      "Complexity": 3.5,
+      "Society and safety": 4.2,
+      "Operating environment": 2.5,
+      "Last updated": "2023-01-24",
+      "_internal_filter_date": "2023-01-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.4,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.4,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.2,
+      "Conditions of affected people": 4.5,
+      "People in need": 5.0,
+      "Concentration of conditions": 4.0,
+      "Complexity": 4.1,
+      "Society and safety": 4.2,
+      "Operating environment": 4.0,
+      "Last updated": "2023-02-21",
+      "_internal_filter_date": "2023-02-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.3,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.3,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.7,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.3,
+      "Society and safety": 4.2,
+      "Operating environment": 2.0,
+      "Last updated": "2023-02-21",
+      "_internal_filter_date": "2023-02-01"
+    },
+    {
+      "crisis_id": "SDN006",
+      "crisis_name": "Floods in Sudan ",
+      "connected_crises": null,
+      "drivers": [
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 2.8,
+      "INFORM Severity category (numeric)": 3.0,
+      "INFORM Severity category": "Medium",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 4.8,
+      "Human Impact": 2.8,
+      "Conditions of affected people": 1.5,
+      "People in need": 1.9,
+      "Concentration of conditions": 1.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.2,
+      "Operating environment": 3.5,
+      "Last updated": "2023-02-21",
+      "_internal_filter_date": "2023-02-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.0,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 3.1,
+      "Human Impact": 4.0,
+      "Conditions of affected people": 4.4,
+      "People in need": 4.8,
+      "Concentration of conditions": 4.0,
+      "Complexity": 3.5,
+      "Society and safety": 4.2,
+      "Operating environment": 2.5,
+      "Last updated": "2023-02-24",
+      "_internal_filter_date": "2023-02-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.4,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.4,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.2,
+      "Conditions of affected people": 4.5,
+      "People in need": 5.0,
+      "Concentration of conditions": 4.0,
+      "Complexity": 4.1,
+      "Society and safety": 4.2,
+      "Operating environment": 4.0,
+      "Last updated": "2023-03-14",
+      "_internal_filter_date": "2023-03-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.3,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.3,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.7,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.3,
+      "Society and safety": 4.2,
+      "Operating environment": 2.0,
+      "Last updated": "2023-03-14",
+      "_internal_filter_date": "2023-03-01"
+    },
+    {
+      "crisis_id": "SDN006",
+      "crisis_name": "Floods in Sudan ",
+      "connected_crises": null,
+      "drivers": [
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 2.8,
+      "INFORM Severity category (numeric)": 3.0,
+      "INFORM Severity category": "Medium",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 4.8,
+      "Human Impact": 2.8,
+      "Conditions of affected people": 1.5,
+      "People in need": 1.9,
+      "Concentration of conditions": 1.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.2,
+      "Operating environment": 3.5,
+      "Last updated": "2023-03-14",
+      "_internal_filter_date": "2023-03-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.0,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 3.1,
+      "Human Impact": 4.0,
+      "Conditions of affected people": 4.4,
+      "People in need": 4.8,
+      "Concentration of conditions": 4.0,
+      "Complexity": 3.5,
+      "Society and safety": 4.2,
+      "Operating environment": 2.5,
+      "Last updated": "2023-03-14",
+      "_internal_filter_date": "2023-03-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.4,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.4,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.2,
+      "Conditions of affected people": 4.5,
+      "People in need": 5.0,
+      "Concentration of conditions": 4.0,
+      "Complexity": 4.1,
+      "Society and safety": 4.2,
+      "Operating environment": 4.0,
+      "Last updated": "2023-04-30",
+      "_internal_filter_date": "2023-04-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.3,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.3,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.7,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.3,
+      "Society and safety": 4.2,
+      "Operating environment": 2.0,
+      "Last updated": "2023-04-30",
+      "_internal_filter_date": "2023-04-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.0,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 3.1,
+      "Human Impact": 3.9,
+      "Conditions of affected people": 4.4,
+      "People in need": 4.8,
+      "Concentration of conditions": 4.0,
+      "Complexity": 3.5,
+      "Society and safety": 4.2,
+      "Operating environment": 2.5,
+      "Last updated": "2023-04-30",
+      "_internal_filter_date": "2023-04-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.5,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.4,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.1,
+      "Conditions of affected people": 4.5,
+      "People in need": 5.0,
+      "Concentration of conditions": 4.0,
+      "Complexity": 4.6,
+      "Society and safety": 4.2,
+      "Operating environment": 5.0,
+      "Last updated": "2023-05-31",
+      "_internal_filter_date": "2023-05-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.4,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.4,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.8,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.7,
+      "Society and safety": 4.2,
+      "Operating environment": 3.0,
+      "Last updated": "2023-05-31",
+      "_internal_filter_date": "2023-05-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.1,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.7,
+      "Geographical Impact": 3.1,
+      "Human Impact": 3.9,
+      "Conditions of affected people": 4.4,
+      "People in need": 4.8,
+      "Concentration of conditions": 4.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.2,
+      "Operating environment": 3.5,
+      "Last updated": "2023-05-31",
+      "_internal_filter_date": "2023-05-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.7,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.9,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.9,
+      "Conditions of affected people": 4.5,
+      "People in need": 5.0,
+      "Concentration of conditions": 4.0,
+      "Complexity": 4.7,
+      "Society and safety": 4.3,
+      "Operating environment": 5.0,
+      "Last updated": "2023-06-30",
+      "_internal_filter_date": "2023-06-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.4,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.4,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.8,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.7,
+      "Society and safety": 4.3,
+      "Operating environment": 3.0,
+      "Last updated": "2023-06-30",
+      "_internal_filter_date": "2023-06-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.0,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.1,
+      "Geographical Impact": 3.2,
+      "Human Impact": 4.5,
+      "Conditions of affected people": 4.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.3,
+      "Operating environment": 3.5,
+      "Last updated": "2023-06-30",
+      "_internal_filter_date": "2023-06-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.6,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.7,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.7,
+      "Conditions of affected people": 4.5,
+      "People in need": 5.0,
+      "Concentration of conditions": 4.0,
+      "Complexity": 4.7,
+      "Society and safety": 4.3,
+      "Operating environment": 5.0,
+      "Last updated": "2023-07-22",
+      "_internal_filter_date": "2023-07-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.4,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.5,
+      "Geographical Impact": 2.2,
+      "Human Impact": 4.0,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.7,
+      "Society and safety": 4.3,
+      "Operating environment": 3.0,
+      "Last updated": "2023-07-22",
+      "_internal_filter_date": "2023-07-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.0,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 4.1,
+      "Geographical Impact": 3.2,
+      "Human Impact": 4.5,
+      "Conditions of affected people": 4.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.3,
+      "Operating environment": 3.5,
+      "Last updated": "2023-07-22",
+      "_internal_filter_date": "2023-07-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.9,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.9,
+      "Geographical Impact": 4.8,
+      "Human Impact": 5.0,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 4.7,
+      "Society and safety": 4.3,
+      "Operating environment": 5.0,
+      "Last updated": "2023-08-28",
+      "_internal_filter_date": "2023-08-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.4,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.4,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.9,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.7,
+      "Society and safety": 4.3,
+      "Operating environment": 3.0,
+      "Last updated": "2023-08-28",
+      "_internal_filter_date": "2023-08-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.5,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.2,
+      "Geographical Impact": 3.2,
+      "Human Impact": 4.6,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.3,
+      "Operating environment": 3.5,
+      "Last updated": "2023-08-28",
+      "_internal_filter_date": "2023-08-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.9,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.9,
+      "Geographical Impact": 4.8,
+      "Human Impact": 5.0,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 4.7,
+      "Society and safety": 4.3,
+      "Operating environment": 5.0,
+      "Last updated": "2023-09-26",
+      "_internal_filter_date": "2023-09-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.4,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 3.4,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.9,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.7,
+      "Society and safety": 4.3,
+      "Operating environment": 3.0,
+      "Last updated": "2023-09-26",
+      "_internal_filter_date": "2023-09-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.5,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "High",
+      "Impact of the crisis": 4.3,
+      "Geographical Impact": 3.2,
+      "Human Impact": 4.7,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 3.9,
+      "Society and safety": 4.3,
+      "Operating environment": 3.5,
+      "Last updated": "2023-09-26",
+      "_internal_filter_date": "2023-09-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.8,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.6,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.5,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 4.6,
+      "Society and safety": 4.0,
+      "Operating environment": 5.0,
+      "Last updated": "2023-10-28",
+      "_internal_filter_date": "2023-10-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.3,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.4,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.8,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.5,
+      "Society and safety": 4.0,
+      "Operating environment": 3.0,
+      "Last updated": "2023-10-28",
+      "_internal_filter_date": "2023-10-01"
+    },
+    {
+      "crisis_id": "SDN008",
+      "crisis_name": "Violence in Darfur and Kordofan regions",
+      "connected_crises": null,
+      "drivers": [
+        "Violence"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.4,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.8,
+      "Geographical Impact": 3.2,
+      "Human Impact": 4.1,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 3.8,
+      "Society and safety": 4.0,
+      "Operating environment": 3.5,
+      "Last updated": "2023-10-28",
+      "_internal_filter_date": "2023-10-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.8,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.6,
+      "Geographical Impact": 4.8,
+      "Human Impact": 4.5,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 4.6,
+      "Society and safety": 4.0,
+      "Operating environment": 5.0,
+      "Last updated": "2023-11-30",
+      "_internal_filter_date": "2023-11-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.3,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.3,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.7,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.5,
+      "Society and safety": 4.0,
+      "Operating environment": 3.0,
+      "Last updated": "2023-11-30",
+      "_internal_filter_date": "2023-11-01"
+    },
+    {
+      "crisis_id": "SDN001",
+      "crisis_name": "Complex crisis in Sudan",
+      "connected_crises": [
+        "EGY004",
+        "LBY004"
+      ],
+      "drivers": [
+        "Displacement",
+        "Violence",
+        "Floods"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "Yes",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 4.9,
+      "INFORM Severity category (numeric)": 5.0,
+      "INFORM Severity category": "Very High",
+      "Reliability": "Very High",
+      "Impact of the crisis": 4.9,
+      "Geographical Impact": 4.8,
+      "Human Impact": 5.0,
+      "Conditions of affected people": 5.0,
+      "People in need": 5.0,
+      "Concentration of conditions": 5.0,
+      "Complexity": 4.7,
+      "Society and safety": 4.3,
+      "Operating environment": 5.0,
+      "Last updated": "2023-12-31",
+      "_internal_filter_date": "2023-12-01"
+    },
+    {
+      "crisis_id": "SDN005",
+      "crisis_name": "International Displacement in Sudan",
+      "connected_crises": [
+        "ERI001",
+        "CAF001",
+        "TCD003",
+        "SYR001",
+        "YEM001"
+      ],
+      "drivers": [
+        "Displacement"
+      ],
+      "regional_or_country": "Country",
+      "country_level": "No",
+      "individual_aggregated": "Individual",
+      "iso3": [
+        "SDN"
+      ],
+      "country": [
+        "Sudan"
+      ],
+      "regions": [
+        "Africa"
+      ],
+      "INFORM Severity Index": 3.4,
+      "INFORM Severity category (numeric)": 4.0,
+      "INFORM Severity category": "High",
+      "Reliability": "High",
+      "Impact of the crisis": 3.4,
+      "Geographical Impact": 2.2,
+      "Human Impact": 3.8,
+      "Conditions of affected people": 3.2,
+      "People in need": 3.4,
+      "Concentration of conditions": 3.0,
+      "Complexity": 3.7,
+      "Society and safety": 4.3,
+      "Operating environment": 3.0,
+      "Last updated": "2023-12-31",
+      "_internal_filter_date": "2023-12-01"
+    }
+  ]
+}

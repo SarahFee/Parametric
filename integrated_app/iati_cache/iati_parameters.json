@@ -1,0 +1,45 @@
+{
+  "organizations": {
+    "NGO": {
+      "initial_capital": 3000000.0,
+      "total_budget": 8000000.0,
+      "operational_rate": 0.005,
+      "transaction_variability": 0.9790597843201639,
+      "emergency_probability_modifier": 1.489529892160082,
+      "premium_discount": 0.9,
+      "claim_trigger": 0.4,
+      "security_risk_modifier": 1.0,
+      "emergency_impact": 0.08
+    },
+    "UN Agency": {
+      "initial_capital": 12000000.0,
+      "total_budget": 22414306.721377753,
+      "operational_rate": 0.0088,
+      "transaction_variability": 1.0,
+      "emergency_probability_modifier": 0.84,
+      "premium_discount": 1.0,
+      "claim_trigger": 0.55,
+      "security_risk_modifier": 0.5,
+      "emergency_impact": 0.15
+    },
+    "Hybrid": {
+      "initial_capital": 6067124.590858507,
+      "total_budget": 10000000.0,
+      "operational_rate": 0.012,
+      "transaction_variability": 1.0,
+      "emergency_probability_modifier": 1.5,
+      "premium_discount": 0.95,
+      "claim_trigger": 0.5,
+      "security_risk_modifier": 0.8,
+      "emergency_impact": 0.1
+    }
+  },
+  "risks": {
+    "emergency_probability": 0.05,
+    "security_risk_factor": 0.2,
+    "waiting_period": 2,
+    "payout_cap_multiple": 3.0
+  },
+  "sim_duration": 18,
+  "fetch_time": "2025-08-29 12:50:11"
+}
