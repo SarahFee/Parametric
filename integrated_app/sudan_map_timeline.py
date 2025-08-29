@@ -81,30 +81,89 @@ def generate_map_events(emergency_data, security_data, dtm_data=None):
     # Generate ACLED Emergency events (new enhanced integration)
     if emergency_data and emergency_data.get('data_source') == 'ACLED API':
         # Handle ACLED data from enhanced integration
+        raw_acled_events = emergency_data.get('raw_acled_events', [])
         conflict_stats = emergency_data.get('conflict_statistics', {})
         monthly_factors = emergency_data.get('monthly_risk_factors', {})
-        
-        # Generate events based on conflict statistics
-        total_events = max(conflict_stats.get('total_events', 0), 3)  # Show at least 3 for visualization
         emergency_prob = emergency_data.get('emergency_probability', 0.25)
         
-        for month_idx, (month, factor) in enumerate(monthly_factors.items(), 1):
-            # Create conflict events for visualization
-            num_events = max(1, int(total_events * factor / 12))  # Distribute across months
-            
-            for i in range(num_events):
+        # Use actual ACLED events if available
+        if raw_acled_events:
+            for event in raw_acled_events:
+                # Extract event details
+                event_date = event.get('event_date', '')
+                if event_date and '-' in str(event_date):
+                    try:
+                        # Parse date to get month
+                        if len(str(event_date)) >= 7:
+                            month_num = int(str(event_date)[5:7])
+                            month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                            month = month_names[month_num - 1] if 1 <= month_num <= 12 else 'Jan'
+                            month_idx = month_num
+                        else:
+                            month = 'Jan'
+                            month_idx = 1
+                    except:
+                        month = 'Jan'
+                        month_idx = 1
+                else:
+                    month = 'Jan'
+                    month_idx = 1
+                
+                # Get coordinates (use provided or default to Sudan center)
+                lat = event.get('latitude', SUDAN_CENTER['lat']) or SUDAN_CENTER['lat']
+                lon = event.get('longitude', SUDAN_CENTER['lon']) or SUDAN_CENTER['lon']
+                
+                # Ensure coordinates are within Sudan bounds
+                lat = max(SUDAN_BOUNDS['south'], min(SUDAN_BOUNDS['north'], float(lat)))
+                lon = max(SUDAN_BOUNDS['west'], min(SUDAN_BOUNDS['east'], float(lon)))
+                
+                # Extract ACLED-specific details
+                disorder_type = event.get('disorder_type', 'Unknown Disorder')
+                event_type = event.get('event_type', 'Unknown Event')
+                fatalities = event.get('fatalities', 0)
+                
+                # Create detailed description with ACLED fields
+                description = f"ACLED Event: {disorder_type} - {event_type}"
+                if fatalities and fatalities > 0:
+                    description += f" (Fatalities: {fatalities})"
+                
                 events.append({
                     'type': 'Emergency',
-                    'event_type': 'Armed Conflict',
+                    'event_type': event_type,
+                    'disorder_type': disorder_type,
                     'month': month,
                     'month_idx': month_idx,
-                    'lat': SUDAN_CENTER['lat'] + np.random.uniform(-3, 3),
-                    'lon': SUDAN_CENTER['lon'] + np.random.uniform(-4, 4),
-                    'severity': emergency_prob,
-                    'description': f"Conflict Event: ACLED data shows {emergency_prob:.1%} emergency probability for {month}",
-                    'source': 'ACLED Conflict Data',
+                    'lat': lat,
+                    'lon': lon,
+                    'severity': min(emergency_prob + (fatalities / 50), 1.0) if fatalities else emergency_prob,
+                    'fatalities': fatalities,
+                    'description': description,
+                    'source': 'ACLED Conflict Database',
                     'color': '#FF4444'  # Red for conflict
                 })
+        else:
+            # Fallback: Generate synthetic events based on statistics
+            total_events = max(conflict_stats.get('total_events', 0), 3)
+            
+            for month_idx, (month, factor) in enumerate(monthly_factors.items(), 1):
+                num_events = max(1, int(total_events * factor / 12))
+                
+                for i in range(num_events):
+                    events.append({
+                        'type': 'Emergency',
+                        'event_type': 'Armed Conflict',
+                        'disorder_type': 'Violence against civilians',
+                        'month': month,
+                        'month_idx': month_idx,
+                        'lat': SUDAN_CENTER['lat'] + np.random.uniform(-3, 3),
+                        'lon': SUDAN_CENTER['lon'] + np.random.uniform(-4, 4),
+                        'severity': emergency_prob,
+                        'fatalities': 0,
+                        'description': f"Simulated Conflict: {emergency_prob:.1%} emergency probability for {month}",
+                        'source': 'ACLED Fallback Data',
+                        'color': '#FF4444'
+                    })
     
     # Generate Emergency events from HAPI/ACLED data (legacy)
     elif emergency_data and 'event_type_distribution' in emergency_data:
@@ -252,9 +311,23 @@ def create_timeline_map(events):
         hoverinfo='skip'
     ))
     
-    # Add Emergency events (red)
+    # Add Emergency events (red) with enhanced ACLED details
     emergency_events = current_events[current_events['type'] == 'Emergency']
     if not emergency_events.empty:
+        # Create detailed hover text for ACLED events
+        hover_text = []
+        for _, event in emergency_events.iterrows():
+            hover_parts = [f"<b>Emergency Event</b>"]
+            if 'disorder_type' in event and event['disorder_type'] and event['disorder_type'] != 'nan':
+                hover_parts.append(f"Disorder Type: {event['disorder_type']}")
+            if 'event_type' in event and event['event_type']:
+                hover_parts.append(f"Event Type: {event['event_type']}")
+            if 'fatalities' in event and event['fatalities'] and event['fatalities'] > 0:
+                hover_parts.append(f"Fatalities: {event['fatalities']}")
+            hover_parts.append(f"Month: {event['month']}")
+            hover_parts.append(f"Source: {event['source']}")
+            hover_text.append("<br>".join(hover_parts))
+        
         fig.add_trace(go.Scattermapbox(
             lat=emergency_events['lat'],
             lon=emergency_events['lon'],
@@ -264,13 +337,11 @@ def create_timeline_map(events):
                 color='red',
                 opacity=0.8
             ),
-            text=emergency_events['description'],
-            hovertemplate="<b>Emergency Event</b><br>" +
-                         "Type: %{text}<br>" +
-                         "Month: " + emergency_events['month'].astype(str) + "<br>" +
-                         "Source: " + emergency_events['source'] + "<br>" +
+            text=hover_text,
+            hovertemplate="%{text}<br>" +
+                         "Location: (%{lat:.2f}, %{lon:.2f})<br>" +
                          "<extra></extra>",
-            name="Emergency (HAPI/ACLED)",
+            name="Emergency (ACLED)",
             showlegend=True
         ))
     
