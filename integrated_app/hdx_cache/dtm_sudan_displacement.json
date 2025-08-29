@@ -1,0 +1,37 @@
+{
+  "emergency_probability": 0.18,
+  "monthly_risk_factors": {
+    "Jan": 0.8,
+    "Feb": 0.7,
+    "Mar": 0.9,
+    "Apr": 1.1,
+    "May": 1.4,
+    "Jun": 1.5,
+    "Jul": 1.4,
+    "Aug": 1.3,
+    "Sep": 1.2,
+    "Oct": 1.0,
+    "Nov": 0.9,
+    "Dec": 0.8
+  },
+  "emergency_probability_modifiers": {
+    "NGO": 1.3,
+    "UN Agency": 0.8,
+    "Hybrid": 1.1
+  },
+  "emergency_impact": {
+    "NGO": 0.12,
+    "UN Agency": 0.08,
+    "Hybrid": 0.1
+  },
+  "displacement_statistics": {
+    "total_idps": 0,
+    "total_returnees": 0,
+    "assessment_count": 0,
+    "latest_assessment": null
+  },
+  "data_source": "DTM Fallback Parameters",
+  "data_source_timestamp": "2025-08-29 13:27:06",
+  "fallback_reason": "DTM API unavailable or no data",
+  "cache_timestamp": "2025-08-29T13:27:06.806072"
+}

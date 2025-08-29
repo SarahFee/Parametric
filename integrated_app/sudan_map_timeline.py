@@ -28,9 +28,11 @@ def load_hdx_data():
         # Load HAPI/ACLED data (now for Emergency events)
         hapi_file = os.path.join("hdx_cache", "hapi_acled_security_data.json")
         acaps_file = os.path.join("hdx_cache", "acaps_emergency_data.json")
+        dtm_file = os.path.join("hdx_cache", "dtm_sudan_displacement.json")
         
         emergency_data = None
         security_data = None
+        dtm_data = None
         
         if os.path.exists(hapi_file):
             with open(hapi_file, 'r') as f:
@@ -39,13 +41,17 @@ def load_hdx_data():
         if os.path.exists(acaps_file):
             with open(acaps_file, 'r') as f:
                 security_data = json.load(f)
+        
+        if os.path.exists(dtm_file):
+            with open(dtm_file, 'r') as f:
+                dtm_data = json.load(f)
                 
-        return emergency_data, security_data
+        return emergency_data, security_data, dtm_data
     except Exception as e:
         st.error(f"Error loading HDX data: {e}")
-        return None, None
+        return None, None, None
 
-def generate_map_events(emergency_data, security_data):
+def generate_map_events(emergency_data, security_data, dtm_data=None):
     """Generate synthetic geographic events from the HDX data for visualization"""
     events = []
     
@@ -94,6 +100,37 @@ def generate_map_events(emergency_data, security_data):
                         'description': f"Security Alert: {crisis.get('crisis_name', 'Unknown')} - Severity: {crisis.get('INFORM Severity category', 'High')}",
                         'source': 'ACAPS INFORM Severity Index',
                         'color': '#FF8800'  # Orange for security
+                    })
+    
+    # Generate DTM Displacement events
+    if dtm_data and 'displacement_statistics' in dtm_data:
+        displacement_stats = dtm_data['displacement_statistics']
+        total_idps = displacement_stats.get('total_idps', 0)
+        
+        if total_idps > 0:
+            # Create displacement events based on IDP numbers
+            monthly_displacement_intensity = total_idps / 12  # Distribute across months
+            
+            for month_idx in range(1, 13):
+                month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][month_idx-1]
+                
+                # Create displacement events with seasonal variation
+                monthly_factor = dtm_data.get('monthly_risk_factors', {}).get(month, 1.0)
+                monthly_events = int(monthly_displacement_intensity * monthly_factor / 50000)  # Scale down
+                
+                for i in range(max(1, monthly_events)):
+                    events.append({
+                        'type': 'Displacement',
+                        'event_type': 'IDP Movement',
+                        'month': month,
+                        'month_idx': month_idx,
+                        'lat': SUDAN_CENTER['lat'] + np.random.uniform(-3, 3),
+                        'lon': SUDAN_CENTER['lon'] + np.random.uniform(-4, 4),
+                        'severity': min(monthly_factor / 2.0, 1.0),  # Normalize severity
+                        'description': f"Displacement: {int(monthly_displacement_intensity * monthly_factor):,} IDPs estimated for {month}",
+                        'source': 'DTM Displacement Tracking Matrix',
+                        'color': '#8800FF'  # Purple for displacement
                     })
     
     return sorted(events, key=lambda x: x['month_idx'])
@@ -203,6 +240,28 @@ def create_timeline_map(events):
             showlegend=True
         ))
     
+    # Add Displacement events (purple)
+    displacement_events = current_events[current_events['type'] == 'Displacement']
+    if not displacement_events.empty:
+        fig.add_trace(go.Scattermapbox(
+            lat=displacement_events['lat'],
+            lon=displacement_events['lon'],
+            mode='markers',
+            marker=dict(
+                size=[s*15 + 8 for s in displacement_events['severity']],
+                color='purple',
+                opacity=0.7
+            ),
+            text=displacement_events['description'],
+            hovertemplate="<b>Displacement Event</b><br>" +
+                         "Type: %{text}<br>" +
+                         "Month: " + displacement_events['month'].astype(str) + "<br>" +
+                         "Source: " + displacement_events['source'] + "<br>" +
+                         "<extra></extra>",
+            name="Displacement (DTM)",
+            showlegend=True
+        ))
+    
     # Update layout
     fig.update_layout(
         mapbox=dict(
@@ -268,15 +327,15 @@ def main():
     
     # Load data
     with st.spinner("Loading HDX data..."):
-        emergency_data, security_data = load_hdx_data()
+        emergency_data, security_data, dtm_data = load_hdx_data()
     
-    if not emergency_data and not security_data:
+    if not emergency_data and not security_data and not dtm_data:
         st.error("No HDX data available. Please ensure the simulation has been run with HDX data enabled.")
         return
     
     # Generate events
     with st.spinner("Processing events for visualization..."):
-        events = generate_map_events(emergency_data, security_data)
+        events = generate_map_events(emergency_data, security_data, dtm_data)
     
     if not events:
         st.warning("No events generated from HDX data.")
