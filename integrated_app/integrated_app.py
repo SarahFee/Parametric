@@ -165,14 +165,18 @@ def get_parameters():
     st.sidebar.markdown("### Data Sources")
     
     # Separate checkboxes for HDX and ACAPS data
-    use_hdx_security_data = st.sidebar.checkbox("Use HDX Security Data (ACLED)", value=False, 
-                                  help="When checked, the model will use HDX data for security parameters")
+    use_hapi_emergency_data = st.sidebar.checkbox("Use HAPI Emergency Data (ACLED)", value=False, 
+                                  help="When checked, the model will use HAPI/ACLED conflict data for emergency parameters")
     
-    use_acaps_emergency_data = st.sidebar.checkbox("Use ACAPS Emergency Data", value=False, 
-                                   help="When checked, the model will use ACAPS INFORM Severity Index for emergency parameters")
+    use_acaps_security_data = st.sidebar.checkbox("Use ACAPS Security Data", value=False, 
+                                   help="When checked, the model will use ACAPS INFORM Severity Index for security parameters")
+
+    use_dtm_emergency_data = st.sidebar.checkbox("Use DTM Emergency Data (Displacement)", value=False, \
+                                   help="When checked, the model will use DTM displacement data for emergency parameters")
     
     # Compute a flag for any HDX-related data for backwards compatibility
-    use_hdx_data = use_hdx_security_data or use_acaps_emergency_data
+    use_hdx_data = use_hapi_emergency_data or use_acaps_security_data
+    use_dtm_data = use_dtm_emergency_data
     
     # Add API key field when either HDX source is enabled
     hdx_api_key = DEFAULT_HDX_API_KEY  # Always use the default API key
@@ -310,8 +314,8 @@ def get_parameters():
         'emergency_probability': emergency_probability,
         'security_risk_factor': security_risk_factor,
         'use_hdx_data': use_hdx_data,  # Keep for backwards compatibility
-        'use_hdx_security_data': use_hdx_security_data,  # New flag for security data only
-        'use_acaps_emergency_data': use_acaps_emergency_data,  # New flag for emergency data only
+        'use_hapi_emergency_data': use_hapi_emergency_data,  # New flag for security data only
+        'use_acaps_security_data': use_acaps_security_data,  # New flag for emergency data only
         'use_iati_data': use_iati_data,
         'hdx_api_key': hdx_api_key if use_hdx_data else None
     }
@@ -1156,7 +1160,7 @@ def main():
             
             **Benefits of using the APIs:**
             - Get up-to-date security incident data from ACLED via HDX
-            - Access current ACAPS INFORM Severity Index for emergency parameters
+            - Access current ACAPS INFORM Severity Index for security parameters
             - More accurate risk modeling based on real conditions
             
             **How it works:**
