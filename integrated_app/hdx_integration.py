@@ -24,14 +24,14 @@ EMERGENCY_CACHE_FILE = os.path.join(CACHE_DIR, "acaps_emergency_data.json")
 CACHE_EXPIRY_DAYS = 7
 
 # API Constants
-ACAPS_AUTH_TOKEN = "6403e2cffe7b64f3d33034137476dd1f129aa397"
+# Removed hardcoded API key - now using environment variable
 ACAPS_MONTHS_2023 = [
     'Jan2023', 'Feb2023', 'Mar2023', 'Apr2023', 'May2023', 'Jun2023',
     'Jul2023', 'Aug2023', 'Sep2023', 'Oct2023', 'Nov2023', 'Dec2023'
 ]
 
 HAPI_BASE = "https://hapi.humdata.org/api/v2"
-APP_IDENTIFIER = "TXlBcHA6ZmVraWguc2FyYWhAZ21haWwuY29t"
+# Removed hardcoded API key - now using environment variable
 HEADERS = {"accept": "application/json"}
 
 # Ensure cache directory exists
@@ -53,7 +53,8 @@ def _write_cache(filepath, data):
 # Fetch ACAPS INFORM Severity Index data
 
 def fetch_acaps_data(months):
-    headers = {"Authorization": f"Token {ACAPS_AUTH_TOKEN}", "Accept": "application/json"}
+    acaps_token = os.getenv('ACAPS_API_KEY', '6403e2cffe7b64f3d33034137476dd1f129aa397')
+    headers = {"Authorization": f"Token {acaps_token}", "Accept": "application/json"}
     all_data = []
     for month in months:
         url = f"https://api.acaps.org/api/v1/inform-severity-index/{month}/?page=2"
@@ -108,7 +109,8 @@ def get_emergency_parameters_from_hdx():
 # Fetch security data from HAPI
 
 def fetch_hapi_data(endpoint):
-    url = f"{HAPI_BASE}{endpoint}?location_code=SDN&app_identifier={APP_IDENTIFIER}"
+    app_identifier = os.getenv('HDX_API_KEY', 'TXlBcHA6ZmVraWguc2FyYWhAZ21haWwuY29t')
+    url = f"{HAPI_BASE}{endpoint}?location_code=SDN&app_identifier={app_identifier}"
     try:
         response = requests.get(url, headers=HEADERS, timeout=60)
         response.raise_for_status()
@@ -169,3 +171,25 @@ if __name__ == "__main__":
     params = get_all_hdx_parameters()
     print(json.dumps(params, indent=2))
 
+
+# Add the missing fetch_hdx_data function that's expected by integrated_model.py
+def fetch_hdx_data(api_key, country_code="SDN", datasets=None):
+    """
+    Fetch HDX data using the provided API key.
+    This is a wrapper function for get_all_hdx_parameters() for compatibility.
+    """
+    logger.info(f"Fetching HDX data for country: {country_code}")
+    
+    # Set environment variable temporarily if api_key is provided
+    original_key = os.environ.get('HDX_API_KEY')
+    if api_key:
+        os.environ['HDX_API_KEY'] = api_key
+    
+    try:
+        return get_all_hdx_parameters()
+    finally:
+        # Restore original environment variable
+        if original_key:
+            os.environ['HDX_API_KEY'] = original_key
+        elif 'HDX_API_KEY' in os.environ:
+            del os.environ['HDX_API_KEY']

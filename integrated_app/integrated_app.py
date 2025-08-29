@@ -10,6 +10,8 @@ import logging
 import traceback
 from datetime import datetime
 import transparent_viz
+from dotenv import load_dotenv
+load_dotenv()
 
 # Initialize session state for storing simulation results
 if 'simulation_results' not in st.session_state:
@@ -80,7 +82,7 @@ HDX_AVAILABLE = hdx_integration is not None
 IATI_AVAILABLE = iati_api is not None
 
 # Set the default API key
-DEFAULT_HDX_API_KEY = "TXlBcHA6ZmVraWguc2FyYWhAZ21haWwuY29t"
+DEFAULT_HDX_API_KEY = os.getenv('HDX_API_KEY', 'TXlBcHA6ZmVraWguc2FyYWhAZ21haWwuY29t')
 
 # Display any import errors that occurred
 if import_errors:
