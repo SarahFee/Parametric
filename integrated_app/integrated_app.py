@@ -317,6 +317,7 @@ def get_parameters():
         'use_hdx_data': use_hdx_data,  # Keep for backwards compatibility
         'use_hapi_emergency_data': use_hapi_emergency_data,  # New flag for security data only
         'use_acaps_security_data': use_acaps_security_data,  # New flag for emergency data only
+        'use_dtm_emergency_data': use_dtm_emergency_data,  # DTM displacement data flag
         'use_iati_data': use_iati_data,
         'hdx_api_key': hdx_api_key if use_hdx_data else None
     }
