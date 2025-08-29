@@ -338,7 +338,7 @@ def main(use_hapi_emergency=False, use_acaps_security=False, use_dtm_emergency=F
             dtm_data = None
     
     if not emergency_data and not security_data and not dtm_data:
-        st.error("No HDX data available. Please ensure the simulation has been run with HDX data enabled.")
+        st.error("No data available. Please ensure the simulation has been run with HDX or DTM data enabled.")
         return
     
     # Generate events

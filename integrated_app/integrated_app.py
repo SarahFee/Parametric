@@ -236,8 +236,9 @@ def get_parameters():
                                     help=param_explanations['waiting_period'])
 
     # Risk factors - only shown if HDX data is disabled or manual override is selected
-    show_risk_factors = not use_hdx_data or st.sidebar.checkbox("Manual Risk Override", value=False, 
-                                                              help="Override HDX risk factors with manual values")
+    any_data_source = use_hdx_data or use_dtm_data
+    show_risk_factors = not any_data_source or st.sidebar.checkbox("Manual Risk Override", value=False, 
+                                                              help="Override data-driven risk factors with manual values")
     
     if show_risk_factors:
         st.sidebar.markdown("### Risk Factors (Manual Override)")
@@ -249,7 +250,7 @@ def get_parameters():
                                               help=param_explanations['security_risk_factor']) / 100
     else:
         st.sidebar.markdown("### Risk Factors (Data-Driven)")
-        data_source = "HDX API" if use_hdx_data else "Default values"
+        data_source = "HDX API + DTM API" if (use_hdx_data or use_dtm_data) else "Default values"
         st.sidebar.info(f"Risk factors will be calculated from {data_source}.")
         emergency_probability = None
         security_risk_factor = None
@@ -1273,7 +1274,7 @@ def main():
             logger.error(f"Unexpected error in main simulation: {e}", exc_info=True)
             
     # HDX Timeline Map Section
-    if MAP_AVAILABLE and HDX_AVAILABLE:
+    if MAP_AVAILABLE and (HDX_AVAILABLE or any([params.get('use_dtm_emergency_data', False)])):
         st.markdown("---")
         st.markdown("## 📍 HDX Events Timeline Map")
         
