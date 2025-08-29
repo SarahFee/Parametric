@@ -103,24 +103,29 @@ def generate_map_events(emergency_data, security_data, dtm_data=None):
                     })
     
     # Generate DTM Displacement events
-    if dtm_data and 'displacement_statistics' in dtm_data:
-        displacement_stats = dtm_data['displacement_statistics']
+    if dtm_data and 'monthly_risk_factors' in dtm_data:
+        displacement_stats = dtm_data.get('displacement_statistics', {})
         total_idps = displacement_stats.get('total_idps', 0)
+        emergency_prob = dtm_data.get('emergency_probability', 0.18)
         
+        # Create displacement events based on IDP numbers OR emergency probability for fallback data
         if total_idps > 0:
-            # Create displacement events based on IDP numbers
             monthly_displacement_intensity = total_idps / 12  # Distribute across months
+        else:
+            # Use emergency probability to generate events for visualization (fallback mode)
+            monthly_displacement_intensity = emergency_prob * 100000  # Scale for visualization
+        
+        # Generate displacement events for each month
+        for month_idx in range(1, 13):
+            month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][month_idx-1]
             
-            for month_idx in range(1, 13):
-                month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][month_idx-1]
-                
-                # Create displacement events with seasonal variation
-                monthly_factor = dtm_data.get('monthly_risk_factors', {}).get(month, 1.0)
-                monthly_events = int(monthly_displacement_intensity * monthly_factor / 50000)  # Scale down
-                
-                for i in range(max(1, monthly_events)):
-                    events.append({
+            # Create displacement events with seasonal variation
+            monthly_factor = dtm_data.get('monthly_risk_factors', {}).get(month, 1.0)
+            monthly_events = int(monthly_displacement_intensity * monthly_factor / 50000)  # Scale down
+            
+            for i in range(max(1, monthly_events)):
+                events.append({
                         'type': 'Displacement',
                         'event_type': 'IDP Movement',
                         'month': month,
