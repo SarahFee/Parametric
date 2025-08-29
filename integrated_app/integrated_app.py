@@ -75,10 +75,12 @@ if current_dir not in sys.path:
 integrated_model = safe_import('integrated_model')
 hdx_integration = safe_import('hdx_integration')
 iati_api = safe_import('iati_api')
+sudan_map_timeline = safe_import('sudan_map_timeline')
 
 # Prepare import status flags
 MODEL_AVAILABLE = integrated_model is not None
 HDX_AVAILABLE = hdx_integration is not None
+MAP_AVAILABLE = sudan_map_timeline is not None
 IATI_AVAILABLE = iati_api is not None
 
 # Set the default API key
@@ -1266,6 +1268,39 @@ def main():
             st.error(f"An unexpected error occurred during simulation: {e}")
             logger.error(f"Unexpected error in main simulation: {e}", exc_info=True)
             
+    # HDX Timeline Map Section
+    if MAP_AVAILABLE and HDX_AVAILABLE:
+        st.markdown("---")
+        st.markdown("## 📍 HDX Events Timeline Map")
+        
+        map_tab1, map_tab2 = st.tabs(["🗺️ Interactive Map", "ℹ️ About the Map"])
+        
+        with map_tab1:
+            try:
+                # Run the map visualization
+                sudan_map_timeline.main()
+            except Exception as map_error:
+                st.error(f"Error loading timeline map: {map_error}")
+                logger.error(f"Map error: {map_error}", exc_info=True)
+        
+        with map_tab2:
+            st.markdown("""
+            ### About the HDX Events Timeline Map
+            
+            **Data Source Correction**: 
+            - **🔴 Emergency Events**: Now correctly sourced from HAPI/ACLED conflict data
+            - **🟠 Security Events**: Now correctly sourced from ACAPS INFORM Severity Index
+            
+            **Features**:
+            - **Timeline Animation**: 1 second = 1 month of real data from 2023
+            - **Interactive Controls**: Play, pause, reset, and manual timeline scrubbing
+            - **Hover Information**: Click/hover on events to see detailed descriptions
+            """)
+    elif not MAP_AVAILABLE:
+        st.info("📍 HDX Events Timeline Map is not available due to import issues.")
+    elif not HDX_AVAILABLE:
+        st.info("📍 HDX Events Timeline Map requires HDX integration to be available.")
+
 # Custom CSS for improved styling
 st.markdown("""
 <style>

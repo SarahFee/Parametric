@@ -1,0 +1,29 @@
+    
+    # HDX Timeline Map Section
+    if MAP_AVAILABLE and HDX_AVAILABLE:
+        st.markdown("---")
+        st.markdown("## 📍 HDX Events Timeline Map")
+        
+        map_tab1, map_tab2 = st.tabs(["🗺️ Interactive Map", "ℹ️ About the Map"])
+        
+        with map_tab1:
+            try:
+                # Run the map visualization
+                sudan_map_timeline.main()
+            except Exception as map_error:
+                st.error(f"Error loading timeline map: {map_error}")
+                logger.error(f"Map error: {map_error}", exc_info=True)
+        
+        with map_tab2:
+            st.markdown("""
+            ### About the HDX Events Timeline Map
+            
+            **Data Source Correction**: 
+            - **🔴 Emergency Events**: Now correctly sourced from HAPI/ACLED conflict data
+            - **🟠 Security Events**: Now correctly sourced from ACAPS INFORM Severity Index
+            """)
+    elif not MAP_AVAILABLE:
+        st.info("📍 HDX Events Timeline Map is not available due to import issues.")
+    elif not HDX_AVAILABLE:
+        st.info("📍 HDX Events Timeline Map requires HDX integration to be available.")
+
