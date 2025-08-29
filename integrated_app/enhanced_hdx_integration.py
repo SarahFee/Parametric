@@ -22,52 +22,61 @@ except ImportError as e:
     DTM_AVAILABLE = False
     logger.warning(f"DTM integration not available: {e}")
 
-def combine_emergency_data_sources(hapi_params, dtm_params):
+# Import ACLED integration
+try:
+    import acled_integration
+    ACLED_AVAILABLE = True
+    logger.info("ACLED integration module loaded successfully")
+except ImportError as e:
+    ACLED_AVAILABLE = False
+    logger.warning(f"ACLED integration not available: {e}")
+
+def combine_emergency_data_sources(acled_params, dtm_params):
     """
-    Combine HAPI/ACLED conflict data with DTM displacement data
+    Combine ACLED conflict data with DTM displacement data
     to create comprehensive emergency parameters
     """
-    if not hapi_params and not dtm_params:
+    if not acled_params and not dtm_params:
         return None
     
-    if not hapi_params:
+    if not acled_params:
         logger.info("Using DTM-only emergency parameters")
         return dtm_params
     
     if not dtm_params:
-        logger.info("Using HAPI-only emergency parameters")
-        return hapi_params
+        logger.info("Using ACLED-only emergency parameters")
+        return acled_params
     
     try:
-        logger.info("Combining HAPI conflict data with DTM displacement data")
+        logger.info("Combining ACLED conflict data with DTM displacement data")
         
         # Base emergency probability: weighted average of both sources
-        hapi_prob = hapi_params.get('base_security_risk', 0.22)
+        acled_prob = acled_params.get('emergency_probability', 0.25)
         dtm_prob = dtm_params.get('emergency_probability', 0.18)
         
-        # Weight HAPI (conflict) slightly higher than DTM (displacement) 
-        combined_prob = (hapi_prob * 0.6) + (dtm_prob * 0.4)
+        # Weight ACLED (conflict) slightly higher than DTM (displacement) 
+        combined_prob = (acled_prob * 0.6) + (dtm_prob * 0.4)
         
         # Combine monthly risk factors
-        hapi_monthly = hapi_params.get('monthly_risk_factors', {})
+        acled_monthly = acled_params.get('monthly_risk_factors', {})
         dtm_monthly = dtm_params.get('monthly_risk_factors', {})
         
         combined_monthly = {}
         for month in ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']:
-            hapi_factor = hapi_monthly.get(month, 1.0)
+            acled_factor = acled_monthly.get(month, 1.0)
             dtm_factor = dtm_monthly.get(month, 1.0)
-            combined_monthly[month] = (hapi_factor * 0.6) + (dtm_factor * 0.4)
+            combined_monthly[month] = (acled_factor * 0.6) + (dtm_factor * 0.4)
         
         # Combine emergency probability modifiers
-        hapi_modifiers = hapi_params.get('security_risk_modifiers', {})
+        acled_modifiers = acled_params.get('emergency_probability_modifiers', {})
         dtm_modifiers = dtm_params.get('emergency_probability_modifiers', {})
         
         combined_modifiers = {}
         for org_type in ['NGO', 'UN Agency', 'Hybrid']:
-            hapi_mod = hapi_modifiers.get(org_type, 1.0)
+            acled_mod = acled_modifiers.get(org_type, 1.0)
             dtm_mod = dtm_modifiers.get(org_type, 1.0)
-            combined_modifiers[org_type] = (hapi_mod + dtm_mod) / 2
+            combined_modifiers[org_type] = (acled_mod + dtm_mod) / 2
         
         # Create combined parameters
         combined_params = {
@@ -76,45 +85,45 @@ def combine_emergency_data_sources(hapi_params, dtm_params):
             'emergency_probability_modifiers': combined_modifiers,
             'emergency_impact': dtm_params.get('emergency_impact', {}),
             'data_sources': {
-                'hapi_conflict': hapi_params.get('data_source', 'HAPI Conflict Events API'),
+                'acled_conflict': acled_params.get('data_source', 'ACLED Conflict Events API'),
                 'dtm_displacement': dtm_params.get('data_source', 'DTM Displacement API')
             },
             'combination_method': 'weighted_average',
-            'hapi_weight': 0.6,
+            'acled_weight': 0.6,
             'dtm_weight': 0.4,
             'data_source_timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             
             # Include raw data from both sources
-            'raw_hapi_data': hapi_params,
+            'raw_acled_data': acled_params,
             'raw_dtm_data': dtm_params,
             
             # Keep important data from both sources
             'displacement_statistics': dtm_params.get('displacement_statistics', {}),
-            'event_type_distribution': hapi_params.get('event_type_distribution', {})
+            'conflict_statistics': acled_params.get('conflict_statistics', {})
         }
         
         logger.info(f"Combined emergency parameters: probability={combined_prob:.3f}")
-        logger.info(f"Data sources: HAPI (60%) + DTM (40%)")
+        logger.info(f"Data sources: ACLED (60%) + DTM (40%)")
         
         return combined_params
         
     except Exception as e:
         logger.error(f"Error combining emergency data sources: {e}", exc_info=True)
-        return hapi_params
+        return acled_params
 
-def get_enhanced_hdx_parameters(use_hapi_emergency=True, use_acaps_security=True, use_dtm_emergency=True):
+def get_enhanced_hdx_parameters(use_acled_emergency=True, use_acaps_security=True, use_dtm_emergency=True):
     """
     Get HDX parameters with DTM integration based on user selections:
-    - Emergency: Combined HAPI/ACLED + DTM displacement data (based on selections)
+    - Emergency: Combined ACLED + DTM displacement data (based on selections)
     - Security: ACAPS INFORM Severity Index data (based on selections)
     """
     try:
-        # Get HAPI/ACLED data (conflict events) - only if user selected it
-        hapi_params = None
-        if use_hapi_emergency:
-            hapi_params = get_security_parameters_from_hdx()
-            if hapi_params:
-                logger.info("Successfully fetched HAPI/ACLED parameters for emergency")
+        # Get ACLED data (conflict events) - only if user selected it
+        acled_params = None
+        if use_acled_emergency and ACLED_AVAILABLE:
+            acled_params = acled_integration.get_acled_emergency_parameters()
+            if acled_params:
+                logger.info("Successfully fetched ACLED parameters for emergency")
         
         # Get DTM displacement data for emergency - only if user selected it
         dtm_params = None
@@ -126,8 +135,8 @@ def get_enhanced_hdx_parameters(use_hapi_emergency=True, use_acaps_security=True
                 logger.error(f"Error fetching DTM parameters: {e}")
                 dtm_params = None
         
-        # Combine HAPI and DTM for emergency parameters
-        emergency_params = combine_emergency_data_sources(hapi_params, dtm_params)
+        # Combine ACLED and DTM for emergency parameters
+        emergency_params = combine_emergency_data_sources(acled_params, dtm_params)
         
         # Get ACAPS data for security parameters - only if user selected it
         security_params = None
@@ -139,7 +148,7 @@ def get_enhanced_hdx_parameters(use_hapi_emergency=True, use_acaps_security=True
                 logger.warning("Failed to fetch ACAPS security parameters.")
         
         # If user selected DTM but not other emergency sources, ensure emergency_params is DTM-only
-        if use_dtm_emergency and not use_hapi_emergency and not emergency_params:
+        if use_dtm_emergency and not use_acled_emergency and not emergency_params:
             emergency_params = dtm_params
 
         # Allow DTM-only or ACAPS-only modes
@@ -152,7 +161,7 @@ def get_enhanced_hdx_parameters(use_hapi_emergency=True, use_acaps_security=True
             "emergency_parameters": emergency_params,
             "fetch_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "data_sources": {
-                "emergency": ["HAPI/ACLED", "DTM"] if dtm_params else ["HAPI/ACLED"],
+                "emergency": ["ACLED", "DTM"] if dtm_params else ["ACLED"],
                 "security": ["ACAPS"]
             }
         }

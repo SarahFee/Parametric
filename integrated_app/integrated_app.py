@@ -165,8 +165,8 @@ def get_parameters():
     st.sidebar.markdown("### Data Sources")
     
     # Separate checkboxes for HDX and ACAPS data
-    use_hapi_emergency_data = st.sidebar.checkbox("Use HAPI Emergency Data (ACLED)", value=False, 
-                                  help="When checked, the model will use HAPI/ACLED conflict data for emergency parameters")
+    use_acled_emergency_data = st.sidebar.checkbox("Use ACLED Emergency Data (Conflict)", value=False, 
+                                  help="When checked, the model will use ACLED conflict data for emergency parameters")
     
     use_acaps_security_data = st.sidebar.checkbox("Use ACAPS Security Data", value=False, 
                                    help="When checked, the model will use ACAPS INFORM Severity Index for security parameters")
@@ -175,7 +175,7 @@ def get_parameters():
                                    help="When checked, the model will use DTM displacement data for emergency parameters")
     
     # Compute a flag for any HDX-related data for backwards compatibility
-    use_hdx_data = use_hapi_emergency_data or use_acaps_security_data
+    use_hdx_data = use_acled_emergency_data or use_acaps_security_data
     use_dtm_data = use_dtm_emergency_data
     
     # Add API key field when either HDX source is enabled
@@ -315,7 +315,7 @@ def get_parameters():
         'emergency_probability': emergency_probability,
         'security_risk_factor': security_risk_factor,
         'use_hdx_data': use_hdx_data,  # Keep for backwards compatibility
-        'use_hapi_emergency_data': use_hapi_emergency_data,  # New flag for security data only
+        'use_acled_emergency_data': use_acled_emergency_data,  # New flag for conflict data
         'use_acaps_security_data': use_acaps_security_data,  # New flag for emergency data only
         'use_dtm_emergency_data': use_dtm_emergency_data,  # DTM displacement data flag
         'use_iati_data': use_iati_data,
@@ -337,7 +337,7 @@ def fetch_hdx_data(api_key, show_spinner=True):
             
             # Use the module to call the function
             hdx_data = hdx_integration.get_all_hdx_parameters(
-                use_hapi_emergency=params.get("use_hapi_emergency_data", False),
+                use_acled_emergency=params.get("use_acled_emergency_data", False),
                 use_acaps_security=params.get("use_acaps_security_data", False),
                 use_dtm_emergency=params.get("use_dtm_emergency_data", False)
             )
@@ -1289,7 +1289,7 @@ def main():
             try:
                 # Run the map visualization with user selections
                 sudan_map_timeline.main(
-                    use_hapi_emergency=params.get('use_hapi_emergency_data', False),
+                    use_acled_emergency=params.get('use_acled_emergency_data', False),
                     use_acaps_security=params.get('use_acaps_security_data', False), 
                     use_dtm_emergency=params.get('use_dtm_emergency_data', False)
                 )

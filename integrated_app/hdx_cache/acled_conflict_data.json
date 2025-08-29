@@ -1,0 +1,40 @@
+{
+  "emergency_probability": 0.25,
+  "monthly_risk_factors": {
+    "Jan": 0.9,
+    "Feb": 0.8,
+    "Mar": 1.1,
+    "Apr": 1.3,
+    "May": 1.5,
+    "Jun": 1.6,
+    "Jul": 1.4,
+    "Aug": 1.2,
+    "Sep": 1.0,
+    "Oct": 0.9,
+    "Nov": 0.8,
+    "Dec": 0.7
+  },
+  "emergency_probability_modifiers": {
+    "NGO": 1.4,
+    "UN Agency": 0.7,
+    "Hybrid": 1.1
+  },
+  "emergency_impact": {
+    "NGO": 0.15,
+    "UN Agency": 0.08,
+    "Hybrid": 0.12
+  },
+  "conflict_statistics": {
+    "total_events": 0,
+    "total_fatalities": 0,
+    "high_severity_events": 0,
+    "event_types": {},
+    "monthly_distribution": {}
+  },
+  "raw_acled_events": [],
+  "data_source": "ACLED API",
+  "data_source_timestamp": "2025-08-29T14:35:45.922922",
+  "fallback_reason": "ACLED API unavailable or authentication failed",
+  "cache_timestamp": "2025-08-29T14:35:45.922933",
+  "api_endpoint": "https://api.acleddata.com/acled/read"
+}

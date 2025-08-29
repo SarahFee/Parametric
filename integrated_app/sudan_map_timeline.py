@@ -318,14 +318,14 @@ def show_event_statistics(events):
         st.subheader("Monthly Event Distribution")
         st.bar_chart(monthly_counts)
 
-def main(use_hapi_emergency=False, use_acaps_security=False, use_dtm_emergency=False):
+def main(use_acled_emergency=False, use_acaps_security=False, use_dtm_emergency=False):
     """Main function to run the Sudan timeline map"""
     st.title("🗺️ Sudan HDX Events Timeline Map")
     
     st.markdown("""
     **Interactive visualization of Emergency and Security events in Sudan (2023)**
     
-    - **🔴 Emergency Events**: HAPI/ACLED conflict data (civilian targeting, demonstrations, political violence)
+    - **🔴 Emergency Events**: ACLED conflict data (civilian targeting, demonstrations, political violence)
     - **🟠 Security Events**: ACAPS INFORM Severity Index data (complex crises, security alerts)
     - **Timeline**: 1 second = 1 month of data
     """)
@@ -335,7 +335,7 @@ def main(use_hapi_emergency=False, use_acaps_security=False, use_dtm_emergency=F
         emergency_data, security_data, dtm_data = load_hdx_data()
         
         # Filter data based on user selections
-        if not use_hapi_emergency:
+        if not use_acled_emergency:
             emergency_data = None
         if not use_acaps_security:
             security_data = None  
@@ -365,7 +365,7 @@ def main(use_hapi_emergency=False, use_acaps_security=False, use_dtm_emergency=F
     with st.expander("📊 Data Sources"):
         st.markdown("""
         **Data Source Assignment (Corrected):**
-        - **Emergency Events**: HAPI/ACLED Conflict Events API + DTM Displacement Data
+        - **Emergency Events**: ACLED Conflict Events API + DTM Displacement Data
         - **Security Events**: ACAPS INFORM Severity Index
         
         **Geographic Coverage**: Sudan (SDN)
