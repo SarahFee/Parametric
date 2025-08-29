@@ -25,9 +25,9 @@ SUDAN_BOUNDS = {
 def load_hdx_data():
     """Load and process HDX data from cache files"""
     try:
-        # Load HAPI/ACLED data (now for Emergency events)
+        # Load HAPI/ACLED data (for Emergency events) and ACAPS data (for Security events)
         hapi_file = os.path.join("hdx_cache", "hapi_acled_security_data.json")
-        acaps_file = os.path.join("hdx_cache", "acaps_emergency_data.json")
+        acaps_file = os.path.join("hdx_cache", "acaps_security_data.json")
         dtm_file = os.path.join("hdx_cache", "dtm_sudan_displacement.json")
         
         emergency_data = None
@@ -313,7 +313,7 @@ def show_event_statistics(events):
         st.subheader("Monthly Event Distribution")
         st.bar_chart(monthly_counts)
 
-def main():
+def main(use_hapi_emergency=False, use_acaps_security=False, use_dtm_emergency=False):
     """Main function to run the Sudan timeline map"""
     st.title("🗺️ Sudan HDX Events Timeline Map")
     
@@ -325,9 +325,17 @@ def main():
     - **Timeline**: 1 second = 1 month of data
     """)
     
-    # Load data
+    # Load data based on user selections
     with st.spinner("Loading HDX data..."):
         emergency_data, security_data, dtm_data = load_hdx_data()
+        
+        # Filter data based on user selections
+        if not use_hapi_emergency:
+            emergency_data = None
+        if not use_acaps_security:
+            security_data = None  
+        if not use_dtm_emergency:
+            dtm_data = None
     
     if not emergency_data and not security_data and not dtm_data:
         st.error("No HDX data available. Please ensure the simulation has been run with HDX data enabled.")
@@ -352,7 +360,7 @@ def main():
     with st.expander("📊 Data Sources"):
         st.markdown("""
         **Data Source Assignment (Corrected):**
-        - **Emergency Events**: HAPI/ACLED Conflict Events API
+        - **Emergency Events**: HAPI/ACLED Conflict Events API + DTM Displacement Data
         - **Security Events**: ACAPS INFORM Severity Index
         
         **Geographic Coverage**: Sudan (SDN)

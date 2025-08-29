@@ -1281,8 +1281,12 @@ def main():
         
         with map_tab1:
             try:
-                # Run the map visualization
-                sudan_map_timeline.main()
+                # Run the map visualization with user selections
+                sudan_map_timeline.main(
+                    use_hapi_emergency=params.get('use_hapi_emergency_data', False),
+                    use_acaps_security=params.get('use_acaps_security_data', False), 
+                    use_dtm_emergency=params.get('use_dtm_emergency_data', False)
+                )
             except Exception as map_error:
                 st.error(f"Error loading timeline map: {map_error}")
                 logger.error(f"Map error: {map_error}", exc_info=True)
